@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAC Back-office Cellfy</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#f5f5f3;color:#1a1a1a;padding:24px}
+.form-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1.5rem;max-width:600px}
+.form-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #e0e0e0}
+.form-header h2{font-size:16px;font-weight:500}
+.form-header p{font-size:13px;color:#888;margin-top:4px}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;padding:8px 10px;font-size:14px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;font-family:inherit}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tipo-btn{padding:10px 12px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#555;cursor:pointer;text-align:left;transition:all .15s}
+.tipo-btn.sel{background:#EBF4FF;border-color:#378ADD;color:#0C447C;font-weight:500}
+.submit-btn{width:100%;padding:10px;font-size:14px;font-weight:500;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem}
+.submit-btn:disabled{background:#aaa;cursor:not-allowed}
+.msg{display:none;border-radius:8px;padding:12px 16px;font-size:14px;margin-top:1rem}
+.msg-ok{background:#EAF3DE;border:1px solid #639922;color:#27500A}
+.msg-erro{background:#FCEBEB;border:1px solid #A32D2D;color:#791F1F}
+</style>
+</head>
+<body>
+
+<div class="form-card">
+  <div class="form-header">
+    <h2>Solicitação de back-office</h2>
+    <p>Preencha e envie — o back-office processa em até 2h</p>
+  </div>
+
+  <div class="field">
+    <label>Tipo de solicitação *</label>
+    <div class="tipo-grid">
+      <button class="tipo-btn sel" onclick="selTipo(this)">Emissão de reversa</button>
+      <button class="tipo-btn" onclick="selTipo(this)">Chamado Mandaê</button>
+      <button class="tipo-btn" onclick="selTipo(this)">Chamado PEX</button>
+      <button class="tipo-btn" onclick="selTipo(this)">Chamado Melhor Envio</button>
+      <button class="tipo-btn" onclick="selTipo(this)">Acompanhamento</button>
+      <button class="tipo-btn" onclick="selTipo(this)">Outro</button>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Nº do pedido *</label>
+      <input type="text" id="f-pedido" placeholder="Ex: 123456789">
+    </div>
+    <div class="field">
+      <label>Canal *</label>
+      <select id="f-canal">
+        <option value="">Selecione...</option>
+        <option>Mercado Livre</option>
+        <option>Shopee</option>
+        <option>KaBuM</option>
+        <option>WhatsApp</option>
+        <option>Site</option>
+        <option>Outro</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Nome do cliente *</label>
+      <input type="text" id="f-cliente" placeholder="Nome completo">
+    </div>
+    <div class="field">
+      <label>Atendente *</label>
+      <select id="f-atendente">
+        <option value="">Selecione...</option>
+        <option>Roseane</option>
+        <option>Sarah</option>
+        <option>Larissa</option>
+        <option>Rafaela</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Motivo / descrição</label>
+    <textarea id="f-obs" placeholder="Descreva brevemente o problema ou o que precisa ser feito..."></textarea>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label>Prazo do canal (se houver)</label>
+      <input type="date" id="f-prazo">
+    </div>
+    <div class="field">
+      <label>SLA esperado</label>
+      <select id="f-sla">
+        <option value="">Selecione...</option>
+        <option value="2h">2h — reversa urgente</option>
+        <option value="4h">4h — chamado padrão</option>
+        <option value="24h">24h — acompanhamento</option>
+        <option value="48h">48h — caso complexo</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="btn-enviar" onclick="enviarForm()">Enviar solicitação</button>
+  <div class="msg msg-ok" id="msg-ok">✅ Solicitação enviada com sucesso! O back-office irá processar em breve.</div>
+  <div class="msg msg-erro" id="msg-erro">❌ Preencha todos os campos obrigatórios.</div>
+</div>
+
+<script>
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbwZHrJssja1o3zs9LYYQA4kyVtgm2Olg4TV6ev4DRLsgmSydTxA6MSq8Nk3DOBdCPax/exec";
+
+let tipoSel="Emissão de reversa";
+
+function selTipo(btn){
+  document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  tipoSel=btn.textContent;
+}
+
+function getNow(){
+  const d=new Date();
+  const dd=String(d.getDate()).padStart(2,'0');
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  const aaaa=d.getFullYear();
+  const hh=String(d.getHours()).padStart(2,'0');
+  const min=String(d.getMinutes()).padStart(2,'0');
+  const seg=String(d.getSeconds()).padStart(2,'0');
+  return dd+'/'+mm+'/'+aaaa+' '+hh+':'+min+':'+seg;
+}
+
+function enviarForm(){
+  const pedido=document.getElementById('f-pedido').value.trim();
+  const canal=document.getElementById('f-canal').value;
+  const cliente=document.getElementById('f-cliente').value.trim();
+  const atendente=document.getElementById('f-atendente').value;
+  if(!pedido||!canal||!cliente||!atendente){
+    document.getElementById('msg-erro').style.display='block';
+    document.getElementById('msg-ok').style.display='none';
+    setTimeout(()=>document.getElementById('msg-erro').style.display='none',4000);
+    return;
+  }
+  const btn=document.getElementById('btn-enviar');
+  btn.disabled=true;btn.textContent='Enviando...';
+  const payload={
+    dataHora:getNow(),pedido,canal,tipo:tipoSel,atendente,cliente,
+    sla:document.getElementById('f-sla').value||'—',
+    prazo:document.getElementById('f-prazo').value||'—',
+    observacao:document.getElementById('f-obs').value.trim()||'—'
+  };
+  fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
+  .then(()=>{
+    document.getElementById('msg-ok').style.display='block';
+    document.getElementById('msg-erro').style.display='none';
+    ['f-pedido','f-cliente','f-obs'].forEach(id=>document.getElementById(id).value='');
+    ['f-canal','f-atendente','f-sla'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('f-prazo').value='';
+    document.querySelectorAll('.tipo-btn').forEach((b,i)=>b.classList.toggle('sel',i===0));
+    tipoSel='Emissão de reversa';
+    setTimeout(()=>document.getElementById('msg-ok').style.display='none',5000);
+  })
+  .catch(()=>{
+    document.getElementById('msg-erro').style.display='block';
+    setTimeout(()=>document.getElementById('msg-erro').style.display='none',4000);
+  })
+  .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
+}
+</script>
+</body>
+</html>
