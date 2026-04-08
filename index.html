@@ -3,39 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAC Back-office Cellfy</title>
+<title>SAC Back-office — Cellfy</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#f5f5f3;color:#1a1a1a;padding:24px}
-.form-card{background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:1.5rem;max-width:600px}
-.form-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #e0e0e0}
-.form-header h2{font-size:16px;font-weight:500}
-.form-header p{font-size:13px;color:#888;margin-top:4px}
+body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;padding:0}
+.header{background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;gap:12px}
+.header img{height:32px}
+.header-divider{width:1px;height:24px;background:#333}
+.header-title{font-size:13px;color:#888}
+.container{padding:32px 24px;max-width:640px;margin:0 auto}
+.form-card{background:#111;border:1px solid #222;border-radius:16px;padding:2rem}
+.form-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
+.form-header h2{font-size:18px;font-weight:600;color:#fff}
+.form-header p{font-size:13px;color:#666;margin-top:4px}
 .field{margin-bottom:1rem}
-.field label{display:block;font-size:13px;font-weight:500;color:#555;margin-bottom:4px}
-.field input,.field select,.field textarea{width:100%;padding:8px 10px;font-size:14px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;font-family:inherit}
-.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.field label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.field input,.field select,.field textarea{width:100%;padding:10px 12px;font-size:14px;border:1px solid #222;border-radius:8px;background:#0a0a0a;color:#fff;font-family:inherit;transition:border .15s}
+.field input:focus,.field select,.field textarea:focus{outline:none;border-color:#7c3aed}
+.field select option{background:#111}
+.field textarea{resize:vertical;min-height:80px;line-height:1.5}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tipo-btn{padding:10px 12px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#555;cursor:pointer;text-align:left;transition:all .15s}
-.tipo-btn.sel{background:#EBF4FF;border-color:#378ADD;color:#0C447C;font-weight:500}
-.submit-btn{width:100%;padding:10px;font-size:14px;font-weight:500;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem}
-.submit-btn:disabled{background:#aaa;cursor:not-allowed}
+.tipo-btn{padding:10px 12px;font-size:13px;border:1px solid #222;border-radius:8px;background:#0a0a0a;color:#888;cursor:pointer;text-align:left;transition:all .15s}
+.tipo-btn:hover{border-color:#444;color:#fff}
+.tipo-btn.sel{background:#1e1033;border-color:#7c3aed;color:#a855f7;font-weight:500}
+.submit-btn{width:100%;padding:12px;font-size:14px;font-weight:600;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem;transition:opacity .15s}
+.submit-btn:hover{opacity:0.9}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed}
 .msg{display:none;border-radius:8px;padding:12px 16px;font-size:14px;margin-top:1rem}
-.msg-ok{background:#EAF3DE;border:1px solid #639922;color:#27500A}
-.msg-erro{background:#FCEBEB;border:1px solid #A32D2D;color:#791F1F}
+.msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
+.msg-erro{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
+.tag{display:inline-block;background:#1a1a2e;color:#a855f7;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500;margin-bottom:8px}
 </style>
 </head>
 <body>
 
+<div class="header">
+  <img src="https://www.cellfy.com.br/cdn/shop/files/logo.png?v=1753990401" alt="Cellfy">
+  <div class="header-divider"></div>
+  <span class="header-title">SAC Back-office</span>
+</div>
+
+<div class="container">
 <div class="form-card">
   <div class="form-header">
+    <span class="tag">Interno</span>
     <h2>Solicitação de back-office</h2>
     <p>Preencha e envie — o back-office processa em até 2h</p>
   </div>
 
   <div class="field">
-    <label>Tipo de solicitação *</label>
+    <label>Tipo de solicitação</label>
     <div class="tipo-grid">
       <button class="tipo-btn sel" onclick="selTipo(this)">Emissão de reversa</button>
       <button class="tipo-btn" onclick="selTipo(this)">Chamado Mandaê</button>
@@ -89,14 +107,14 @@ body{font-family:system-ui,sans-serif;background:#f5f5f3;color:#1a1a1a;padding:2
 
   <div class="field-row">
     <div class="field">
-      <label>Prazo do canal (se houver)</label>
+      <label>Prazo do canal</label>
       <input type="date" id="f-prazo">
     </div>
     <div class="field">
       <label>SLA esperado</label>
       <select id="f-sla">
         <option value="">Selecione...</option>
-        <option value="2h">2h — reversa urgente</option>
+        <option value="2h">2h — chamado urgente</option>
         <option value="4h">4h — chamado padrão</option>
         <option value="24h">24h — acompanhamento</option>
         <option value="48h">48h — caso complexo</option>
@@ -108,10 +126,10 @@ body{font-family:system-ui,sans-serif;background:#f5f5f3;color:#1a1a1a;padding:2
   <div class="msg msg-ok" id="msg-ok">✅ Solicitação enviada com sucesso! O back-office irá processar em breve.</div>
   <div class="msg msg-erro" id="msg-erro">❌ Preencha todos os campos obrigatórios.</div>
 </div>
+</div>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyipif36QYAntfC5FxN6_-A1oSuxZMd42dlfGmCN-ydy5dw_IDSjYBwvq8Mk3-XqVeE/exec";
-
 let tipoSel="Emissão de reversa";
 
 function selTipo(btn){
@@ -122,13 +140,7 @@ function selTipo(btn){
 
 function getNow(){
   const d=new Date();
-  const dd=String(d.getDate()).padStart(2,'0');
-  const mm=String(d.getMonth()+1).padStart(2,'0');
-  const aaaa=d.getFullYear();
-  const hh=String(d.getHours()).padStart(2,'0');
-  const min=String(d.getMinutes()).padStart(2,'0');
-  const seg=String(d.getSeconds()).padStart(2,'0');
-  return dd+'/'+mm+'/'+aaaa+' '+hh+':'+min+':'+seg;
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
 }
 
 function enviarForm(){
