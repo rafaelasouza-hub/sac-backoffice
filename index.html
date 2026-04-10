@@ -61,6 +61,15 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .est-msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
 .est-msg-err{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
 
+/* ALERTA DUPLICIDADE */
+.est-msg-dup{background:#2a1f00;border:1px solid #a16207;color:#fbbf24;border-radius:8px;padding:14px 16px;font-size:13px;margin-top:1rem;display:none;line-height:1.6}
+.est-msg-dup strong{display:block;font-size:14px;margin-bottom:6px}
+.dup-actions{display:flex;gap:8px;margin-top:12px}
+.dup-btn-cancel{flex:1;padding:9px;font-size:13px;font-weight:600;background:transparent;border:1px solid #a16207;color:#fbbf24;border-radius:8px;cursor:pointer;transition:all .15s}
+.dup-btn-cancel:hover{background:#2a1f00}
+.dup-btn-confirm{flex:1;padding:9px;font-size:13px;font-weight:600;background:#a16207;border:none;color:#fff;border-radius:8px;cursor:pointer;transition:opacity .15s}
+.dup-btn-confirm:hover{opacity:0.85}
+
 /* PAINEL */
 .painel-container{padding:24px;max-width:1200px;margin:0 auto}
 .painel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
@@ -290,6 +299,17 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   <button class="est-btn" id="e-btn" onclick="registrarEstorno()">Registrar estorno</button>
   <div class="est-msg est-msg-ok" id="e-msg-ok">✅ Registrado com sucesso!</div>
   <div class="est-msg est-msg-err" id="e-msg-err">❌ Preencha os campos obrigatórios.</div>
+
+  <!-- ALERTA DE DUPLICIDADE -->
+  <div class="est-msg-dup" id="e-msg-dup">
+    <strong>⚠️ Possível duplicidade detectada!</strong>
+    Já existe um estorno registrado para o cliente <span id="dup-cliente-num"></span> com o valor de <span id="dup-valor"></span>.<br>
+    Registrado em: <span id="dup-data"></span> por <span id="dup-solicitante"></span> — Status: <span id="dup-status"></span>
+    <div class="dup-actions">
+      <button class="dup-btn-cancel" onclick="cancelarDup()">Cancelar</button>
+      <button class="dup-btn-confirm" onclick="confirmarDup()">Registrar mesmo assim</button>
+    </div>
+  </div>
 </div>
 </div>
 </div>
@@ -375,6 +395,7 @@ const SHEET_ID="14A4IYG2DEDqp1Jk4AK06cqxLVchSc8USUR1E94Mz9Yg";
 const SHEET_NAME="Solicitações";
 
 let tipoSel="Emissão de reversa";
+let payloadPendente=null; // guarda payload caso usuário confirme duplicidade
 
 function verificarSenha(){
   const senha=document.getElementById('p-senha').value;
@@ -436,6 +457,11 @@ function enviarForm(){
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
 }
 
+// Normaliza valor para comparação (remove R$, espaços, trata vírgula/ponto)
+function normalizarValor(v){
+  return parseFloat(String(v).replace(/[^\d,\.]/g,'').replace(',','.'));
+}
+
 async function registrarEstorno(){
   const solicitante=document.getElementById('e-solicitante').value;
   const tipo=document.getElementById('e-motivo').value;
@@ -445,35 +471,98 @@ async function registrarEstorno(){
   const tipoPix=document.getElementById('e-tipo-pix').value;
   const chavePix=document.getElementById('e-chave-pix').value.trim();
   const nomeTitular=document.getElementById('e-nome-titular').value.trim();
+
   if(!solicitante||!tipo||!numCliente||!nomeCliente||!valor||!tipoPix||!chavePix||!nomeTitular){
     document.getElementById('e-msg-err').style.display='block';
     document.getElementById('e-msg-ok').style.display='none';
+    document.getElementById('e-msg-dup').style.display='none';
     setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
     return;
   }
+
   const btn=document.getElementById('e-btn');
-  btn.disabled=true;btn.textContent='Registrando...';
-  const payload={tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,
+  btn.disabled=true;btn.textContent='Verificando...';
+
+  // Monta payload
+  const payload={
+    tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,
     num_cliente:numCliente,nome_cliente:nomeCliente,valor,
     tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,
     banco:document.getElementById('e-banco').value.trim(),
     agencia:document.getElementById('e-agencia').value.trim(),
     conta:document.getElementById('e-conta').value.trim(),
     cpf_cnpj:document.getElementById('e-cpf-cnpj').value.trim(),
-    observacoes:document.getElementById('e-obs-est').value.trim()};
+    observacoes:document.getElementById('e-obs-est').value.trim()
+  };
+
+  // Verificar duplicidade antes de enviar
+  try{
+    const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
+    const jsonEst=await resEst.json();
+    const estornos=jsonEst.dados||[];
+    const valorNovo=normalizarValor(valor);
+
+    const duplicata=estornos.find(e=>{
+      const mesmoCliente=String(e.num_cliente).trim()===String(numCliente).trim();
+      const mesmoValor=normalizarValor(e.valor)===valorNovo;
+      return mesmoCliente && mesmoValor;
+    });
+
+    if(duplicata){
+      // Mostrar alerta de duplicidade
+      document.getElementById('dup-cliente-num').textContent='Nº '+duplicata.num_cliente;
+      document.getElementById('dup-valor').textContent='R$ '+duplicata.valor;
+      document.getElementById('dup-data').textContent=duplicata.data||'—';
+      document.getElementById('dup-solicitante').textContent=duplicata.solicitante||'—';
+      document.getElementById('dup-status').textContent=duplicata.status||'—';
+      document.getElementById('e-msg-dup').style.display='block';
+      document.getElementById('e-msg-err').style.display='none';
+      document.getElementById('e-msg-ok').style.display='none';
+      payloadPendente=payload;
+      btn.disabled=false;btn.textContent='Registrar estorno';
+      return;
+    }
+  }catch(e){
+    // Se falhar a verificação, permite enviar normalmente
+  }
+
+  // Sem duplicidade — envia direto
+  await enviarEstorno(payload, btn);
+}
+
+async function enviarEstorno(payload, btn){
+  if(!btn) btn=document.getElementById('e-btn');
+  btn.disabled=true;btn.textContent='Registrando...';
   try{
     await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     document.getElementById('e-msg-ok').style.display='block';
     document.getElementById('e-msg-err').style.display='none';
-    ['e-solicitante','e-tipo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix',
-     'e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est']
-    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    setTimeout(()=>document.getElementById('e-msg-ok').style.display='none',3000);
+    document.getElementById('e-msg-dup').style.display='none';
+    limparFormEstorno();
+    setTimeout(()=>document.getElementById('e-msg-ok').style.display='none',4000);
   }catch(err){
     document.getElementById('e-msg-err').style.display='block';
     setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
   }
   btn.disabled=false;btn.textContent='Registrar estorno';
+  payloadPendente=null;
+}
+
+function cancelarDup(){
+  document.getElementById('e-msg-dup').style.display='none';
+  payloadPendente=null;
+}
+
+async function confirmarDup(){
+  if(!payloadPendente) return;
+  document.getElementById('e-msg-dup').style.display='none';
+  await enviarEstorno(payloadPendente);
+}
+
+function limparFormEstorno(){
+  ['e-solicitante','e-motivo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix',
+   'e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est']
+  .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 
 function contarPor(dados,campo){
@@ -496,7 +585,6 @@ async function carregarPainel(){
   document.getElementById('p-loading').style.display='block';
   document.getElementById('p-conteudo').style.display='none';
   try{
-    // SAC
     const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q1000&headers=0`;
     const res=await fetch(url);
     const txt=await res.text();
@@ -539,7 +627,6 @@ async function carregarPainel(){
       <td><span class="p-badge ${statusBadge[d.status]||'pb-aberto'}">${d.status||'—'}</span></td>
     </tr>`).join('');
 
-    // ESTORNOS
     try{
       const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
       const jsonEst=await resEst.json();
