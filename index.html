@@ -6,11 +6,15 @@
 <title>SAC Back-office — Cellfy</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh;padding:0}
+body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
 .header{background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;gap:12px}
 .header img{height:32px}
 .header-divider{width:1px;height:24px;background:#333}
 .header-title{font-size:13px;color:#888}
+.tab-nav{display:flex;gap:0;border-bottom:1px solid #222;padding:0 24px;background:#111}
+.tab-nav-btn{padding:14px 20px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.tab-nav-btn.active{color:#a855f7;border-bottom:2px solid #a855f7;font-weight:500}
+.tab-page{display:none}.tab-page.active{display:block}
 .container{padding:32px 24px;max-width:640px;margin:0 auto}
 .form-card{background:#111;border:1px solid #222;border-radius:16px;padding:2rem}
 .form-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
@@ -19,7 +23,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .field{margin-bottom:1rem}
 .field label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
 .field input,.field select,.field textarea{width:100%;padding:10px 12px;font-size:14px;border:1px solid #222;border-radius:8px;background:#0a0a0a;color:#fff;font-family:inherit;transition:border .15s}
-.field input:focus,.field select,.field textarea:focus{outline:none;border-color:#7c3aed}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:#7c3aed}
 .field select option{background:#111}
 .field textarea{resize:vertical;min-height:80px;line-height:1.5}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -34,6 +38,51 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
 .msg-erro{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
 .tag{display:inline-block;background:#1a1a2e;color:#a855f7;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500;margin-bottom:8px}
+
+/* ESTORNOS */
+.estornos-layout{display:grid;grid-template-columns:40% 60%;min-height:calc(100vh - 120px)}
+.estornos-left{padding:24px;border-right:1px solid #222;background:#0a0a0a;overflow-y:auto}
+.estornos-right{padding:24px;background:#0a0a0a;overflow-x:auto}
+.est-card{background:#111;border:1px solid #222;border-radius:12px;padding:1.5rem}
+.est-card h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid #222}
+.est-field{margin-bottom:0.85rem}
+.est-field label{display:block;font-size:11px;font-weight:500;color:#666;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
+.est-field input,.est-field select,.est-field textarea{width:100%;padding:8px 10px;font-size:13px;border:1px solid #222;border-radius:7px;background:#0a0a0a;color:#fff;font-family:inherit;transition:border .15s}
+.est-field input:focus,.est-field select:focus,.est-field textarea:focus{outline:none;border-color:#7c3aed}
+.est-field select option{background:#111}
+.est-field textarea{resize:vertical;min-height:60px;line-height:1.5}
+.est-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.est-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.est-section-title{font-size:11px;font-weight:600;color:#7c3aed;text-transform:uppercase;letter-spacing:0.8px;margin:1rem 0 0.5rem;padding-top:0.75rem;border-top:1px solid #1a1a1a}
+.est-btn{width:100%;padding:10px;font-size:13px;font-weight:600;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem;transition:opacity .15s}
+.est-btn:hover{opacity:0.9}
+.est-btn:disabled{opacity:0.5;cursor:not-allowed}
+.est-msg{display:none;border-radius:7px;padding:10px 14px;font-size:13px;margin-top:0.75rem}
+.est-msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
+.est-msg-err{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
+.est-tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.est-tbl-header h3{font-size:15px;font-weight:600;color:#fff}
+.est-filters{display:flex;gap:6px;flex-wrap:wrap}
+.est-filter-btn{padding:4px 10px;font-size:11px;border:1px solid #333;border-radius:20px;background:transparent;color:#666;cursor:pointer;transition:all .15s}
+.est-filter-btn.active{background:#1e1033;border-color:#7c3aed;color:#a855f7}
+.est-refresh{padding:4px 10px;font-size:12px;border:1px solid #333;border-radius:20px;background:transparent;color:#666;cursor:pointer}
+.est-refresh:hover{color:#fff;border-color:#555}
+.est-tbl-wrap{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden}
+.est-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.est-tbl th{text-align:left;padding:9px 10px;font-size:11px;font-weight:500;color:#555;border-bottom:1px solid #222;background:#0d0d0d;white-space:nowrap}
+.est-tbl td{padding:9px 10px;border-bottom:1px solid #1a1a1a;color:#ccc;vertical-align:middle}
+.est-tbl tr:last-child td{border-bottom:none}
+.est-tbl tr:hover td{background:#161616}
+.est-tbl-footer{padding:10px 12px;background:#0d0d0d;border-top:1px solid #222;display:flex;gap:20px;font-size:12px;color:#555}
+.est-tbl-footer span{color:#a855f7;font-weight:500}
+.est-status-sel{padding:4px 6px;font-size:11px;border:1px solid #333;border-radius:6px;background:#0a0a0a;color:#ccc;cursor:pointer;font-family:inherit}
+.est-status-sel:focus{outline:none;border-color:#7c3aed}
+.est-loading{text-align:center;padding:2rem;color:#444;font-size:13px}
+.est-empty{text-align:center;padding:2rem;color:#444;font-size:13px}
+@media(max-width:768px){
+  .estornos-layout{grid-template-columns:1fr}
+  .estornos-left{border-right:none;border-bottom:1px solid #222}
+}
 </style>
 </head>
 <body>
@@ -44,6 +93,13 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   <span class="header-title">SAC Back-office</span>
 </div>
 
+<div class="tab-nav">
+  <button class="tab-nav-btn active" onclick="trocarTab('sac')">Formulário SAC</button>
+  <button class="tab-nav-btn" onclick="trocarTab('estornos')">Estornos & Reembolsos</button>
+</div>
+
+<!-- ABA SAC -->
+<div id="tab-sac" class="tab-page active">
 <div class="container">
 <div class="form-card">
   <div class="form-header">
@@ -127,15 +183,166 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   <div class="msg msg-erro" id="msg-erro">❌ Preencha todos os campos obrigatórios.</div>
 </div>
 </div>
+</div>
+
+<!-- ABA ESTORNOS -->
+<div id="tab-estornos" class="tab-page">
+  <div class="estornos-layout">
+    <div class="estornos-left">
+      <div class="est-card">
+        <h3>Novo estorno / reembolso</h3>
+
+        <div class="est-row">
+          <div class="est-field">
+            <label>Solicitante *</label>
+            <select id="e-solicitante">
+              <option value="">Selecione...</option>
+              <option>Sarah</option>
+              <option>Larissa</option>
+              <option>Roseane</option>
+              <option>Rafaela</option>
+            </select>
+          </div>
+          <div class="est-field">
+            <label>Tipo *</label>
+            <select id="e-tipo">
+              <option value="">Selecione...</option>
+              <option>Estorno</option>
+              <option>Reembolso</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="est-row">
+          <div class="est-field">
+            <label>Nº do cliente *</label>
+            <input type="text" id="e-num-cliente" placeholder="Ex: 123456">
+          </div>
+          <div class="est-field">
+            <label>Valor R$ *</label>
+            <input type="text" id="e-valor" placeholder="Ex: 150,00">
+          </div>
+        </div>
+
+        <div class="est-field">
+          <label>Nome do cliente *</label>
+          <input type="text" id="e-nome-cliente" placeholder="Nome completo">
+        </div>
+
+        <div class="est-section-title">Dados PIX</div>
+
+        <div class="est-row">
+          <div class="est-field">
+            <label>Tipo de PIX *</label>
+            <select id="e-tipo-pix">
+              <option value="">Selecione...</option>
+              <option>CPF</option>
+              <option>CNPJ</option>
+              <option>E-mail</option>
+              <option>Telefone</option>
+              <option>Chave aleatória</option>
+            </select>
+          </div>
+          <div class="est-field">
+            <label>Chave PIX *</label>
+            <input type="text" id="e-chave-pix" placeholder="Chave PIX">
+          </div>
+        </div>
+
+        <div class="est-field">
+          <label>Nome do titular *</label>
+          <input type="text" id="e-nome-titular" placeholder="Nome do titular da chave">
+        </div>
+
+        <div class="est-section-title">Dados bancários (opcional)</div>
+
+        <div class="est-row-3">
+          <div class="est-field">
+            <label>Banco</label>
+            <input type="text" id="e-banco" placeholder="Ex: Nubank">
+          </div>
+          <div class="est-field">
+            <label>Agência</label>
+            <input type="text" id="e-agencia" placeholder="0001">
+          </div>
+          <div class="est-field">
+            <label>Conta</label>
+            <input type="text" id="e-conta" placeholder="00000-0">
+          </div>
+        </div>
+
+        <div class="est-field">
+          <label>CPF/CNPJ do titular</label>
+          <input type="text" id="e-cpf-cnpj" placeholder="000.000.000-00">
+        </div>
+
+        <div class="est-field">
+          <label>Observações</label>
+          <textarea id="e-obs-est" placeholder="Informações adicionais..."></textarea>
+        </div>
+
+        <button class="est-btn" id="e-btn" onclick="registrarEstorno()">Registrar estorno</button>
+        <div class="est-msg est-msg-ok" id="e-msg-ok">✅ Registrado com sucesso!</div>
+        <div class="est-msg est-msg-err" id="e-msg-err">❌ Preencha os campos obrigatórios.</div>
+      </div>
+    </div>
+
+    <div class="estornos-right">
+      <div class="est-tbl-header">
+        <h3>Histórico</h3>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div class="est-filters">
+            <button class="est-filter-btn active" onclick="filtrarEstornos(this,'todos')">Todos</button>
+            <button class="est-filter-btn" onclick="filtrarEstornos(this,'⏳ Pendente')">⏳ Pendente</button>
+            <button class="est-filter-btn" onclick="filtrarEstornos(this,'🔄 Em análise')">🔄 Em análise</button>
+            <button class="est-filter-btn" onclick="filtrarEstornos(this,'✅ Concluído')">✅ Concluído</button>
+            <button class="est-filter-btn" onclick="filtrarEstornos(this,'❌ Cancelado')">❌ Cancelado</button>
+          </div>
+          <button class="est-refresh" onclick="carregarEstornos()">↻</button>
+        </div>
+      </div>
+
+      <div class="est-tbl-wrap">
+        <div id="e-loading" class="est-loading">Carregando...</div>
+        <table class="est-tbl" id="e-tbl" style="display:none">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Solicitante</th>
+              <th>N. Cliente</th>
+              <th>Cliente</th>
+              <th>Valor</th>
+              <th>Tipo</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="e-tbody"></tbody>
+        </table>
+        <div id="e-empty" class="est-empty" style="display:none">Nenhum registro encontrado.</div>
+        <div class="est-tbl-footer" id="e-footer" style="display:none">
+          Total: <span id="e-total">0</span> registros &nbsp;|&nbsp;
+          Soma: <span id="e-soma">R$ 0,00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyipif36QYAntfC5FxN6_-A1oSuxZMd42dlfGmCN-ydy5dw_IDSjYBwvq8Mk3-XqVeE/exec";
 let tipoSel="Emissão de reversa";
+let todosEstornos=[];
+let filtroEstornoAtual='todos';
+
+function trocarTab(aba){
+  document.querySelectorAll('.tab-nav-btn').forEach((b,i)=>b.classList.toggle('active',['sac','estornos'][i]===aba));
+  document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+aba));
+  if(aba==='estornos'&&todosEstornos.length===0) carregarEstornos();
+}
 
 function selTipo(btn){
   document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  tipoSel=btn.textContent;
+  btn.classList.add('sel');tipoSel=btn.textContent;
 }
 
 function getNow(){
@@ -178,6 +385,122 @@ function enviarForm(){
     setTimeout(()=>document.getElementById('msg-erro').style.display='none',4000);
   })
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
+}
+
+async function carregarEstornos(){
+  document.getElementById('e-loading').style.display='block';
+  document.getElementById('e-tbl').style.display='none';
+  document.getElementById('e-empty').style.display='none';
+  document.getElementById('e-footer').style.display='none';
+  try{
+    const res=await fetch(SCRIPT_URL+'?acao=listarEstornos');
+    const json=await res.json();
+    todosEstornos=json.dados||[];
+    renderEstornos(filtroEstornoAtual);
+  }catch(err){
+    document.getElementById('e-loading').textContent='Erro ao carregar. Clique em ↻ para tentar novamente.';
+  }
+}
+
+function renderEstornos(filtro){
+  const lista=filtro==='todos'?todosEstornos:todosEstornos.filter(d=>d.status===filtro);
+  const tbody=document.getElementById('e-tbody');
+  document.getElementById('e-loading').style.display='none';
+  if(lista.length===0){
+    document.getElementById('e-tbl').style.display='none';
+    document.getElementById('e-empty').style.display='block';
+    document.getElementById('e-footer').style.display='flex';
+    document.getElementById('e-total').textContent='0';
+    document.getElementById('e-soma').textContent='R$ 0,00';
+    return;
+  }
+  document.getElementById('e-tbl').style.display='table';
+  document.getElementById('e-empty').style.display='none';
+  document.getElementById('e-footer').style.display='flex';
+  let soma=0;
+  tbody.innerHTML=lista.map(d=>{
+    const val=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'))||0;
+    soma+=val;
+    return`<tr>
+      <td style="white-space:nowrap;color:#666;font-size:11px">${d.data}</td>
+      <td>${d.solicitante}</td>
+      <td style="color:#666">${d.num_cliente}</td>
+      <td style="font-weight:500">${d.nome_cliente}</td>
+      <td style="color:#a855f7;font-weight:500">R$ ${d.valor}</td>
+      <td style="color:#666">${d.tipo}</td>
+      <td>
+        <select class="est-status-sel" onchange="atualizarStatusEstorno(${d.row},this.value)">
+          <option ${d.status==='⏳ Pendente'?'selected':''}>⏳ Pendente</option>
+          <option ${d.status==='🔄 Em análise'?'selected':''}>🔄 Em análise</option>
+          <option ${d.status==='✅ Concluído'?'selected':''}>✅ Concluído</option>
+          <option ${d.status==='❌ Cancelado'?'selected':''}>❌ Cancelado</option>
+        </select>
+      </td>
+    </tr>`;
+  }).join('');
+  document.getElementById('e-total').textContent=lista.length;
+  document.getElementById('e-soma').textContent='R$ '+soma.toFixed(2).replace('.',',');
+}
+
+function filtrarEstornos(btn,filtro){
+  filtroEstornoAtual=filtro;
+  document.querySelectorAll('.est-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderEstornos(filtro);
+}
+
+async function registrarEstorno(){
+  const solicitante=document.getElementById('e-solicitante').value;
+  const tipo=document.getElementById('e-tipo').value;
+  const numCliente=document.getElementById('e-num-cliente').value.trim();
+  const nomeCliente=document.getElementById('e-nome-cliente').value.trim();
+  const valor=document.getElementById('e-valor').value.trim();
+  const tipoPix=document.getElementById('e-tipo-pix').value;
+  const chavePix=document.getElementById('e-chave-pix').value.trim();
+  const nomeTitular=document.getElementById('e-nome-titular').value.trim();
+  if(!solicitante||!tipo||!numCliente||!nomeCliente||!valor||!tipoPix||!chavePix||!nomeTitular){
+    document.getElementById('e-msg-err').style.display='block';
+    document.getElementById('e-msg-ok').style.display='none';
+    setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
+    return;
+  }
+  const btn=document.getElementById('e-btn');
+  btn.disabled=true;btn.textContent='Registrando...';
+  const payload={
+    tipo_registro:'estorno',solicitante,tipo_pag:tipo,
+    num_cliente:numCliente,nome_cliente:nomeCliente,valor,
+    tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,
+    banco:document.getElementById('e-banco').value.trim(),
+    agencia:document.getElementById('e-agencia').value.trim(),
+    conta:document.getElementById('e-conta').value.trim(),
+    cpf_cnpj:document.getElementById('e-cpf-cnpj').value.trim(),
+    observacoes:document.getElementById('e-obs-est').value.trim()
+  };
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    document.getElementById('e-msg-ok').style.display='block';
+    document.getElementById('e-msg-err').style.display='none';
+    ['e-solicitante','e-tipo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix',
+     'e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est']
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    setTimeout(()=>{
+      document.getElementById('e-msg-ok').style.display='none';
+      todosEstornos=[];carregarEstornos();
+    },2000);
+  }catch(err){
+    document.getElementById('e-msg-err').style.display='block';
+    setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
+  }
+  btn.disabled=false;btn.textContent='Registrar estorno';
+}
+
+async function atualizarStatusEstorno(row,status){
+  try{
+    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({tipo_registro:'atualizar_status_estorno',row,status})});
+    const item=todosEstornos.find(d=>d.row===row);
+    if(item)item.status=status;
+  }catch(err){}
 }
 </script>
 </body>
