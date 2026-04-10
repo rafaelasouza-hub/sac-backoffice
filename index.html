@@ -239,8 +239,8 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   </div>
   <div class="est-row">
     <div class="est-field">
-      <label>Nº do cliente *</label>
-      <input type="text" id="e-num-cliente" placeholder="Ex: 123456">
+      <label>Nº do pedido *</label>
+      <input type="text" id="e-num-cliente" placeholder="Ex: 123456789">
     </div>
     <div class="est-field">
       <label>Valor R$ *</label>
@@ -303,7 +303,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   <!-- ALERTA DE DUPLICIDADE -->
   <div class="est-msg-dup" id="e-msg-dup">
     <strong>⚠️ Possível duplicidade detectada!</strong>
-    Já existe um estorno registrado para o cliente <span id="dup-cliente-num"></span> com o valor de <span id="dup-valor"></span>.<br>
+    Já existe um estorno com o pedido <span id="dup-cliente-num"></span>, chave PIX <span id="dup-valor"></span> e cliente <span id="dup-nome-cliente"></span>.<br>
     Registrado em: <span id="dup-data"></span> por <span id="dup-solicitante"></span> — Status: <span id="dup-status"></span>
     <div class="dup-actions">
       <button class="dup-btn-cancel" onclick="cancelarDup()">Cancelar</button>
@@ -503,15 +503,17 @@ async function registrarEstorno(){
     const valorNovo=normalizarValor(valor);
 
     const duplicata=estornos.find(e=>{
-      const mesmoCliente=String(e.num_cliente).trim()===String(numCliente).trim();
-      const mesmoValor=normalizarValor(e.valor)===valorNovo;
-      return mesmoCliente && mesmoValor;
+      const mesmoPedido=String(e.num_cliente).trim().toLowerCase()===String(numCliente).trim().toLowerCase();
+      const mesmaChave=String(e.chave_pix).trim().toLowerCase()===String(chavePix).trim().toLowerCase();
+      const mesmoNome=String(e.nome_cliente).trim().toLowerCase()===String(nomeCliente).trim().toLowerCase();
+      return mesmoPedido && mesmaChave && mesmoNome;
     });
 
     if(duplicata){
       // Mostrar alerta de duplicidade
-      document.getElementById('dup-cliente-num').textContent='Nº '+duplicata.num_cliente;
-      document.getElementById('dup-valor').textContent='R$ '+duplicata.valor;
+      document.getElementById('dup-cliente-num').textContent='Nº pedido '+duplicata.num_cliente;
+      document.getElementById('dup-valor').textContent=duplicata.chave_pix;
+      document.getElementById('dup-nome-cliente').textContent=duplicata.nome_cliente;
       document.getElementById('dup-data').textContent=duplicata.data||'—';
       document.getElementById('dup-solicitante').textContent=duplicata.solicitante||'—';
       document.getElementById('dup-status').textContent=duplicata.status||'—';
