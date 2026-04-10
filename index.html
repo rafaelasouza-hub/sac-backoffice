@@ -15,6 +15,8 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .tab-nav-btn{padding:14px 20px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
 .tab-nav-btn.active{color:#a855f7;border-bottom:2px solid #a855f7;font-weight:500}
 .tab-page{display:none}.tab-page.active{display:block}
+
+/* SAC FORM */
 .container{padding:32px 24px;max-width:640px;margin:0 auto}
 .form-card{background:#111;border:1px solid #222;border-radius:16px;padding:2rem}
 .form-header{margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
@@ -40,48 +42,66 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .tag{display:inline-block;background:#1a1a2e;color:#a855f7;font-size:11px;padding:3px 8px;border-radius:20px;font-weight:500;margin-bottom:8px}
 
 /* ESTORNOS */
-.estornos-layout{display:grid;grid-template-columns:40% 60%;min-height:calc(100vh - 120px)}
-.estornos-left{padding:24px;border-right:1px solid #222;background:#0a0a0a;overflow-y:auto}
-.estornos-right{padding:24px;background:#0a0a0a;overflow-x:auto}
-.est-card{background:#111;border:1px solid #222;border-radius:12px;padding:1.5rem}
-.est-card h3{font-size:15px;font-weight:600;color:#fff;margin-bottom:1rem;padding-bottom:0.75rem;border-bottom:1px solid #222}
-.est-field{margin-bottom:0.85rem}
-.est-field label{display:block;font-size:11px;font-weight:500;color:#666;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px}
-.est-field input,.est-field select,.est-field textarea{width:100%;padding:8px 10px;font-size:13px;border:1px solid #222;border-radius:7px;background:#0a0a0a;color:#fff;font-family:inherit;transition:border .15s}
+.est-container{padding:32px 24px;max-width:640px;margin:0 auto}
+.est-card{background:#111;border:1px solid #222;border-radius:16px;padding:2rem}
+.est-card h3{font-size:18px;font-weight:600;color:#fff;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
+.est-field{margin-bottom:1rem}
+.est-field label{display:block;font-size:12px;font-weight:500;color:#888;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.est-field input,.est-field select,.est-field textarea{width:100%;padding:10px 12px;font-size:14px;border:1px solid #222;border-radius:8px;background:#0a0a0a;color:#fff;font-family:inherit;transition:border .15s}
 .est-field input:focus,.est-field select:focus,.est-field textarea:focus{outline:none;border-color:#7c3aed}
 .est-field select option{background:#111}
-.est-field textarea{resize:vertical;min-height:60px;line-height:1.5}
-.est-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.est-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.est-section-title{font-size:11px;font-weight:600;color:#7c3aed;text-transform:uppercase;letter-spacing:0.8px;margin:1rem 0 0.5rem;padding-top:0.75rem;border-top:1px solid #1a1a1a}
-.est-btn{width:100%;padding:10px;font-size:13px;font-weight:600;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem;transition:opacity .15s}
+.est-field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.est-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.est-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.est-section-title{font-size:11px;font-weight:600;color:#7c3aed;text-transform:uppercase;letter-spacing:0.8px;margin:1.25rem 0 0.75rem;padding-top:1rem;border-top:1px solid #1a1a1a}
+.est-btn{width:100%;padding:12px;font-size:14px;font-weight:600;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;cursor:pointer;margin-top:0.5rem;transition:opacity .15s}
 .est-btn:hover{opacity:0.9}
 .est-btn:disabled{opacity:0.5;cursor:not-allowed}
-.est-msg{display:none;border-radius:7px;padding:10px 14px;font-size:13px;margin-top:0.75rem}
+.est-msg{display:none;border-radius:8px;padding:12px 16px;font-size:14px;margin-top:1rem}
 .est-msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
 .est-msg-err{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
-.est-tbl-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
-.est-tbl-header h3{font-size:15px;font-weight:600;color:#fff}
-.est-filters{display:flex;gap:6px;flex-wrap:wrap}
-.est-filter-btn{padding:4px 10px;font-size:11px;border:1px solid #333;border-radius:20px;background:transparent;color:#666;cursor:pointer;transition:all .15s}
-.est-filter-btn.active{background:#1e1033;border-color:#7c3aed;color:#a855f7}
-.est-refresh{padding:4px 10px;font-size:12px;border:1px solid #333;border-radius:20px;background:transparent;color:#666;cursor:pointer}
-.est-refresh:hover{color:#fff;border-color:#555}
-.est-tbl-wrap{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden}
-.est-tbl{width:100%;border-collapse:collapse;font-size:12px}
-.est-tbl th{text-align:left;padding:9px 10px;font-size:11px;font-weight:500;color:#555;border-bottom:1px solid #222;background:#0d0d0d;white-space:nowrap}
-.est-tbl td{padding:9px 10px;border-bottom:1px solid #1a1a1a;color:#ccc;vertical-align:middle}
-.est-tbl tr:last-child td{border-bottom:none}
-.est-tbl tr:hover td{background:#161616}
-.est-tbl-footer{padding:10px 12px;background:#0d0d0d;border-top:1px solid #222;display:flex;gap:20px;font-size:12px;color:#555}
-.est-tbl-footer span{color:#a855f7;font-weight:500}
-.est-status-sel{padding:4px 6px;font-size:11px;border:1px solid #333;border-radius:6px;background:#0a0a0a;color:#ccc;cursor:pointer;font-family:inherit}
-.est-status-sel:focus{outline:none;border-color:#7c3aed}
-.est-loading{text-align:center;padding:2rem;color:#444;font-size:13px}
-.est-empty{text-align:center;padding:2rem;color:#444;font-size:13px}
-@media(max-width:768px){
-  .estornos-layout{grid-template-columns:1fr}
-  .estornos-left{border-right:none;border-bottom:1px solid #222}
+
+/* PAINEL */
+.painel-container{padding:24px;max-width:1200px;margin:0 auto}
+.painel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
+.painel-header h2{font-size:18px;font-weight:600}
+.painel-refresh{padding:6px 14px;font-size:12px;border:1px solid #333;border-radius:20px;background:transparent;color:#888;cursor:pointer;transition:all .15s}
+.painel-refresh:hover{color:#fff;border-color:#555}
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.p-card{background:#111;border:1px solid #222;border-radius:12px;padding:16px 20px}
+.p-card .lbl{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.p-card .val{font-size:28px;font-weight:600}
+.p-card .sub{font-size:12px;color:#555;margin-top:4px}
+.p-card.purple .val{color:#a855f7}
+.p-card.green .val{color:#4ade80}
+.p-card.amber .val{color:#fbbf24}
+.p-card.red .val{color:#f87171}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.p-chart{background:#111;border:1px solid #222;border-radius:12px;padding:16px 20px}
+.p-chart h4{font-size:12px;font-weight:500;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.bar-label{font-size:12px;color:#888;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-wrap{flex:1;background:#1a1a1a;border-radius:4px;height:8px;overflow:hidden}
+.bar-fill{height:8px;border-radius:4px;background:linear-gradient(90deg,#7c3aed,#a855f7);transition:width .5s}
+.bar-count{font-size:12px;color:#666;min-width:20px;text-align:right}
+.tbl-recentes{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden}
+.tbl-recentes-header{padding:14px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
+.tbl-recentes-header h4{font-size:13px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.5px}
+.p-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.p-tbl th{text-align:left;padding:8px 12px;font-size:11px;font-weight:500;color:#444;border-bottom:1px solid #1a1a1a;background:#0d0d0d;white-space:nowrap}
+.p-tbl td{padding:8px 12px;border-bottom:1px solid #161616;color:#aaa;vertical-align:middle}
+.p-tbl tr:last-child td{border-bottom:none}
+.p-tbl tr:hover td{background:#141414}
+.p-badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500}
+.pb-aberto{background:#1a1a2e;color:#818cf8}
+.pb-andamento{background:#2a1f0d;color:#fbbf24}
+.pb-ag{background:#1a1a0a;color:#a3a300}
+.pb-resolvido{background:#0d2a1a;color:#4ade80}
+.pb-cancelado{background:#2a0d0d;color:#f87171}
+.p-loading{text-align:center;padding:3rem;color:#333;font-size:13px}
+@media(max-width:900px){
+  .cards-grid{grid-template-columns:repeat(2,1fr)}
+  .charts-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -96,6 +116,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 <div class="tab-nav">
   <button class="tab-nav-btn active" onclick="trocarTab('sac')">Formulário SAC</button>
   <button class="tab-nav-btn" onclick="trocarTab('estornos')">Estornos & Reembolsos</button>
+  <button class="tab-nav-btn" onclick="trocarTab('painel')">Painel</button>
 </div>
 
 <!-- ABA SAC -->
@@ -107,7 +128,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
     <h2>Solicitação de back-office</h2>
     <p>Preencha e envie — o back-office processa em até 2h</p>
   </div>
-
   <div class="field">
     <label>Tipo de solicitação</label>
     <div class="tipo-grid">
@@ -119,7 +139,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       <button class="tipo-btn" onclick="selTipo(this)">Outro</button>
     </div>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label>Nº do pedido *</label>
@@ -138,7 +157,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       </select>
     </div>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label>Nome do cliente *</label>
@@ -155,12 +173,10 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       </select>
     </div>
   </div>
-
   <div class="field">
     <label>Motivo / descrição</label>
-    <textarea id="f-obs" placeholder="Descreva brevemente o problema ou o que precisa ser feito..."></textarea>
+    <textarea id="f-obs" placeholder="Descreva brevemente o problema..."></textarea>
   </div>
-
   <div class="field-row">
     <div class="field">
       <label>Prazo do canal</label>
@@ -177,9 +193,8 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       </select>
     </div>
   </div>
-
   <button class="submit-btn" id="btn-enviar" onclick="enviarForm()">Enviar solicitação</button>
-  <div class="msg msg-ok" id="msg-ok">✅ Solicitação enviada com sucesso! O back-office irá processar em breve.</div>
+  <div class="msg msg-ok" id="msg-ok">✅ Solicitação enviada com sucesso!</div>
   <div class="msg msg-erro" id="msg-erro">❌ Preencha todos os campos obrigatórios.</div>
 </div>
 </div>
@@ -187,157 +202,162 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 
 <!-- ABA ESTORNOS -->
 <div id="tab-estornos" class="tab-page">
-  <div class="estornos-layout">
-    <div class="estornos-left">
-      <div class="est-card">
-        <h3>Novo estorno / reembolso</h3>
+<div class="est-container">
+<div class="est-card">
+  <h3>Novo estorno / reembolso</h3>
+  <div class="est-row">
+    <div class="est-field">
+      <label>Solicitante *</label>
+      <select id="e-solicitante">
+        <option value="">Selecione...</option>
+        <option>Sarah</option>
+        <option>Larissa</option>
+        <option>Roseane</option>
+        <option>Rafaela</option>
+      </select>
+    </div>
+    <div class="est-field">
+      <label>Tipo *</label>
+      <select id="e-tipo">
+        <option value="">Selecione...</option>
+        <option>Estorno</option>
+        <option>Reembolso</option>
+      </select>
+    </div>
+  </div>
+  <div class="est-row">
+    <div class="est-field">
+      <label>Nº do cliente *</label>
+      <input type="text" id="e-num-cliente" placeholder="Ex: 123456">
+    </div>
+    <div class="est-field">
+      <label>Valor R$ *</label>
+      <input type="text" id="e-valor" placeholder="Ex: 150,00">
+    </div>
+  </div>
+  <div class="est-field">
+    <label>Nome do cliente *</label>
+    <input type="text" id="e-nome-cliente" placeholder="Nome completo">
+  </div>
+  <div class="est-section-title">Dados PIX</div>
+  <div class="est-row">
+    <div class="est-field">
+      <label>Tipo de PIX *</label>
+      <select id="e-tipo-pix">
+        <option value="">Selecione...</option>
+        <option>CPF</option>
+        <option>CNPJ</option>
+        <option>E-mail</option>
+        <option>Telefone</option>
+        <option>Chave aleatória</option>
+      </select>
+    </div>
+    <div class="est-field">
+      <label>Chave PIX *</label>
+      <input type="text" id="e-chave-pix" placeholder="Chave PIX">
+    </div>
+  </div>
+  <div class="est-field">
+    <label>Nome do titular *</label>
+    <input type="text" id="e-nome-titular" placeholder="Nome do titular da chave">
+  </div>
+  <div class="est-section-title">Dados bancários (opcional)</div>
+  <div class="est-row-3">
+    <div class="est-field">
+      <label>Banco</label>
+      <input type="text" id="e-banco" placeholder="Ex: Nubank">
+    </div>
+    <div class="est-field">
+      <label>Agência</label>
+      <input type="text" id="e-agencia" placeholder="0001">
+    </div>
+    <div class="est-field">
+      <label>Conta</label>
+      <input type="text" id="e-conta" placeholder="00000-0">
+    </div>
+  </div>
+  <div class="est-field">
+    <label>CPF/CNPJ do titular</label>
+    <input type="text" id="e-cpf-cnpj" placeholder="000.000.000-00">
+  </div>
+  <div class="est-field">
+    <label>Observações</label>
+    <textarea id="e-obs-est" placeholder="Informações adicionais..."></textarea>
+  </div>
+  <button class="est-btn" id="e-btn" onclick="registrarEstorno()">Registrar estorno</button>
+  <div class="est-msg est-msg-ok" id="e-msg-ok">✅ Registrado com sucesso!</div>
+  <div class="est-msg est-msg-err" id="e-msg-err">❌ Preencha os campos obrigatórios.</div>
+</div>
+</div>
+</div>
 
-        <div class="est-row">
-          <div class="est-field">
-            <label>Solicitante *</label>
-            <select id="e-solicitante">
-              <option value="">Selecione...</option>
-              <option>Sarah</option>
-              <option>Larissa</option>
-              <option>Roseane</option>
-              <option>Rafaela</option>
-            </select>
-          </div>
-          <div class="est-field">
-            <label>Tipo *</label>
-            <select id="e-tipo">
-              <option value="">Selecione...</option>
-              <option>Estorno</option>
-              <option>Reembolso</option>
-            </select>
-          </div>
-        </div>
+<!-- ABA PAINEL -->
+<div id="tab-painel" class="tab-page">
+<div class="painel-container">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <h2 style="font-size:18px;font-weight:600">Painel de indicadores</h2>
+    <button class="painel-refresh" onclick="carregarPainel()">↻ Atualizar</button>
+  </div>
 
-        <div class="est-row">
-          <div class="est-field">
-            <label>Nº do cliente *</label>
-            <input type="text" id="e-num-cliente" placeholder="Ex: 123456">
-          </div>
-          <div class="est-field">
-            <label>Valor R$ *</label>
-            <input type="text" id="e-valor" placeholder="Ex: 150,00">
-          </div>
-        </div>
+  <div id="p-loading" class="p-loading">Carregando indicadores...</div>
 
-        <div class="est-field">
-          <label>Nome do cliente *</label>
-          <input type="text" id="e-nome-cliente" placeholder="Nome completo">
-        </div>
+  <div id="p-conteudo" style="display:none">
+    <div class="cards-grid">
+      <div class="p-card purple"><div class="lbl">Total</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
+      <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
+      <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
+      <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
+    </div>
 
-        <div class="est-section-title">Dados PIX</div>
-
-        <div class="est-row">
-          <div class="est-field">
-            <label>Tipo de PIX *</label>
-            <select id="e-tipo-pix">
-              <option value="">Selecione...</option>
-              <option>CPF</option>
-              <option>CNPJ</option>
-              <option>E-mail</option>
-              <option>Telefone</option>
-              <option>Chave aleatória</option>
-            </select>
-          </div>
-          <div class="est-field">
-            <label>Chave PIX *</label>
-            <input type="text" id="e-chave-pix" placeholder="Chave PIX">
-          </div>
-        </div>
-
-        <div class="est-field">
-          <label>Nome do titular *</label>
-          <input type="text" id="e-nome-titular" placeholder="Nome do titular da chave">
-        </div>
-
-        <div class="est-section-title">Dados bancários (opcional)</div>
-
-        <div class="est-row-3">
-          <div class="est-field">
-            <label>Banco</label>
-            <input type="text" id="e-banco" placeholder="Ex: Nubank">
-          </div>
-          <div class="est-field">
-            <label>Agência</label>
-            <input type="text" id="e-agencia" placeholder="0001">
-          </div>
-          <div class="est-field">
-            <label>Conta</label>
-            <input type="text" id="e-conta" placeholder="00000-0">
-          </div>
-        </div>
-
-        <div class="est-field">
-          <label>CPF/CNPJ do titular</label>
-          <input type="text" id="e-cpf-cnpj" placeholder="000.000.000-00">
-        </div>
-
-        <div class="est-field">
-          <label>Observações</label>
-          <textarea id="e-obs-est" placeholder="Informações adicionais..."></textarea>
-        </div>
-
-        <button class="est-btn" id="e-btn" onclick="registrarEstorno()">Registrar estorno</button>
-        <div class="est-msg est-msg-ok" id="e-msg-ok">✅ Registrado com sucesso!</div>
-        <div class="est-msg est-msg-err" id="e-msg-err">❌ Preencha os campos obrigatórios.</div>
+    <div class="charts-grid">
+      <div class="p-chart">
+        <h4>Por atendente</h4>
+        <div id="p-atendente"></div>
+      </div>
+      <div class="p-chart">
+        <h4>Por canal</h4>
+        <div id="p-canal"></div>
+      </div>
+      <div class="p-chart">
+        <h4>Por tipo</h4>
+        <div id="p-tipo"></div>
+      </div>
+      <div class="p-chart">
+        <h4>Por status</h4>
+        <div id="p-status"></div>
       </div>
     </div>
 
-    <div class="estornos-right">
-      <div class="est-tbl-header">
-        <h3>Histórico</h3>
-        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-          <div class="est-filters">
-            <button class="est-filter-btn active" onclick="filtrarEstornos(this,'todos')">Todos</button>
-            <button class="est-filter-btn" onclick="filtrarEstornos(this,'⏳ Pendente')">⏳ Pendente</button>
-            <button class="est-filter-btn" onclick="filtrarEstornos(this,'🔄 Em análise')">🔄 Em análise</button>
-            <button class="est-filter-btn" onclick="filtrarEstornos(this,'✅ Concluído')">✅ Concluído</button>
-            <button class="est-filter-btn" onclick="filtrarEstornos(this,'❌ Cancelado')">❌ Cancelado</button>
-          </div>
-          <button class="est-refresh" onclick="carregarEstornos()">↻</button>
-        </div>
+    <div class="tbl-recentes">
+      <div class="tbl-recentes-header">
+        <h4>Últimas solicitações</h4>
+        <span id="p-count" style="font-size:12px;color:#444"></span>
       </div>
-
-      <div class="est-tbl-wrap">
-        <div id="e-loading" class="est-loading">Carregando...</div>
-        <table class="est-tbl" id="e-tbl" style="display:none">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Solicitante</th>
-              <th>N. Cliente</th>
-              <th>Cliente</th>
-              <th>Valor</th>
-              <th>Tipo</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="e-tbody"></tbody>
+      <div style="overflow-x:auto">
+        <table class="p-tbl">
+          <thead><tr>
+            <th>Data/Hora</th><th>Pedido</th><th>Canal</th>
+            <th>Tipo</th><th>Atendente</th><th>Status</th>
+          </tr></thead>
+          <tbody id="p-tbody"></tbody>
         </table>
-        <div id="e-empty" class="est-empty" style="display:none">Nenhum registro encontrado.</div>
-        <div class="est-tbl-footer" id="e-footer" style="display:none">
-          Total: <span id="e-total">0</span> registros &nbsp;|&nbsp;
-          Soma: <span id="e-soma">R$ 0,00</span>
-        </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyipif36QYAntfC5FxN6_-A1oSuxZMd42dlfGmCN-ydy5dw_IDSjYBwvq8Mk3-XqVeE/exec";
+const SHEET_ID="14A4IYG2DEDqp1Jk4AK06cqxLVchSc8USUR1E94Mz9Yg";
+const SHEET_NAME="Solicitações";
+
 let tipoSel="Emissão de reversa";
-let todosEstornos=[];
-let filtroEstornoAtual='todos';
 
 function trocarTab(aba){
-  document.querySelectorAll('.tab-nav-btn').forEach((b,i)=>b.classList.toggle('active',['sac','estornos'][i]===aba));
+  document.querySelectorAll('.tab-nav-btn').forEach((b,i)=>b.classList.toggle('active',['sac','estornos','painel'][i]===aba));
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+aba));
-  if(aba==='estornos'&&todosEstornos.length===0) carregarEstornos();
+  if(aba==='painel') carregarPainel();
 }
 
 function selTipo(btn){
@@ -363,12 +383,10 @@ function enviarForm(){
   }
   const btn=document.getElementById('btn-enviar');
   btn.disabled=true;btn.textContent='Enviando...';
-  const payload={
-    dataHora:getNow(),pedido,canal,tipo:tipoSel,atendente,cliente,
+  const payload={dataHora:getNow(),pedido,canal,tipo:tipoSel,atendente,cliente,
     sla:document.getElementById('f-sla').value||'—',
     prazo:document.getElementById('f-prazo').value||'—',
-    observacao:document.getElementById('f-obs').value.trim()||'—'
-  };
+    observacao:document.getElementById('f-obs').value.trim()||'—'};
   fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)})
   .then(()=>{
     document.getElementById('msg-ok').style.display='block';
@@ -380,73 +398,8 @@ function enviarForm(){
     tipoSel='Emissão de reversa';
     setTimeout(()=>document.getElementById('msg-ok').style.display='none',5000);
   })
-  .catch(()=>{
-    document.getElementById('msg-erro').style.display='block';
-    setTimeout(()=>document.getElementById('msg-erro').style.display='none',4000);
-  })
+  .catch(()=>{document.getElementById('msg-erro').style.display='block';setTimeout(()=>document.getElementById('msg-erro').style.display='none',4000);})
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
-}
-
-async function carregarEstornos(){
-  document.getElementById('e-loading').style.display='block';
-  document.getElementById('e-tbl').style.display='none';
-  document.getElementById('e-empty').style.display='none';
-  document.getElementById('e-footer').style.display='none';
-  try{
-    const res=await fetch(SCRIPT_URL+'?acao=listarEstornos');
-    const json=await res.json();
-    todosEstornos=json.dados||[];
-    renderEstornos(filtroEstornoAtual);
-  }catch(err){
-    document.getElementById('e-loading').textContent='Erro ao carregar. Clique em ↻ para tentar novamente.';
-  }
-}
-
-function renderEstornos(filtro){
-  const lista=filtro==='todos'?todosEstornos:todosEstornos.filter(d=>d.status===filtro);
-  const tbody=document.getElementById('e-tbody');
-  document.getElementById('e-loading').style.display='none';
-  if(lista.length===0){
-    document.getElementById('e-tbl').style.display='none';
-    document.getElementById('e-empty').style.display='block';
-    document.getElementById('e-footer').style.display='flex';
-    document.getElementById('e-total').textContent='0';
-    document.getElementById('e-soma').textContent='R$ 0,00';
-    return;
-  }
-  document.getElementById('e-tbl').style.display='table';
-  document.getElementById('e-empty').style.display='none';
-  document.getElementById('e-footer').style.display='flex';
-  let soma=0;
-  tbody.innerHTML=lista.map(d=>{
-    const val=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'))||0;
-    soma+=val;
-    return`<tr>
-      <td style="white-space:nowrap;color:#666;font-size:11px">${d.data}</td>
-      <td>${d.solicitante}</td>
-      <td style="color:#666">${d.num_cliente}</td>
-      <td style="font-weight:500">${d.nome_cliente}</td>
-      <td style="color:#a855f7;font-weight:500">R$ ${d.valor}</td>
-      <td style="color:#666">${d.tipo}</td>
-      <td>
-        <select class="est-status-sel" onchange="atualizarStatusEstorno(${d.row},this.value)">
-          <option ${d.status==='⏳ Pendente'?'selected':''}>⏳ Pendente</option>
-          <option ${d.status==='🔄 Em análise'?'selected':''}>🔄 Em análise</option>
-          <option ${d.status==='✅ Concluído'?'selected':''}>✅ Concluído</option>
-          <option ${d.status==='❌ Cancelado'?'selected':''}>❌ Cancelado</option>
-        </select>
-      </td>
-    </tr>`;
-  }).join('');
-  document.getElementById('e-total').textContent=lista.length;
-  document.getElementById('e-soma').textContent='R$ '+soma.toFixed(2).replace('.',',');
-}
-
-function filtrarEstornos(btn,filtro){
-  filtroEstornoAtual=filtro;
-  document.querySelectorAll('.est-filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderEstornos(filtro);
 }
 
 async function registrarEstorno(){
@@ -466,16 +419,14 @@ async function registrarEstorno(){
   }
   const btn=document.getElementById('e-btn');
   btn.disabled=true;btn.textContent='Registrando...';
-  const payload={
-    tipo_registro:'estorno',solicitante,tipo_pag:tipo,
+  const payload={tipo_registro:'estorno',solicitante,tipo_pag:tipo,
     num_cliente:numCliente,nome_cliente:nomeCliente,valor,
     tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,
     banco:document.getElementById('e-banco').value.trim(),
     agencia:document.getElementById('e-agencia').value.trim(),
     conta:document.getElementById('e-conta').value.trim(),
     cpf_cnpj:document.getElementById('e-cpf-cnpj').value.trim(),
-    observacoes:document.getElementById('e-obs-est').value.trim()
-  };
+    observacoes:document.getElementById('e-obs-est').value.trim()};
   try{
     await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     document.getElementById('e-msg-ok').style.display='block';
@@ -483,10 +434,7 @@ async function registrarEstorno(){
     ['e-solicitante','e-tipo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix',
      'e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est']
     .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-    setTimeout(()=>{
-      document.getElementById('e-msg-ok').style.display='none';
-      todosEstornos=[];carregarEstornos();
-    },2000);
+    setTimeout(()=>document.getElementById('e-msg-ok').style.display='none',3000);
   }catch(err){
     document.getElementById('e-msg-err').style.display='block';
     setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
@@ -494,13 +442,80 @@ async function registrarEstorno(){
   btn.disabled=false;btn.textContent='Registrar estorno';
 }
 
-async function atualizarStatusEstorno(row,status){
+function contarPor(dados,campo){
+  return dados.reduce((a,d)=>{const k=d[campo]||'—';a[k]=(a[k]||0)+1;return a;},{});
+}
+
+function renderBars(containerId,dados,max){
+  const el=document.getElementById(containerId);
+  el.innerHTML=Object.entries(dados).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
+    <div class="bar-row">
+      <span class="bar-label" title="${k}">${k}</span>
+      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((v/max)*100)}%"></div></div>
+      <span class="bar-count">${v}</span>
+    </div>`).join('');
+}
+
+const statusBadge={'Em aberto':'pb-aberto','Em andamento':'pb-andamento','Ag. retorno':'pb-ag','Resolvido':'pb-resolvido','Cancelado':'pb-cancelado'};
+
+async function carregarPainel(){
+  document.getElementById('p-loading').style.display='block';
+  document.getElementById('p-conteudo').style.display='none';
   try{
-    await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({tipo_registro:'atualizar_status_estorno',row,status})});
-    const item=todosEstornos.find(d=>d.row===row);
-    if(item)item.status=status;
-  }catch(err){}
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q1000&headers=0`;
+    const res=await fetch(url);
+    const txt=await res.text();
+    const json=JSON.parse(txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
+    const rows=json.table.rows;
+
+    const dados=rows.map(r=>{
+      const c=v=>{const val=r.c[v];if(!val)return '';if(val.f)return val.f;if(typeof val.v==='string'&&val.v.startsWith('Date(')){const p=val.v.replace('Date(','').replace(')','').split(',');const d=new Date(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]),parseInt(p[3]||0),parseInt(p[4]||0));return d.toLocaleDateString('pt-BR')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}return val.v!==null?String(val.v):'';};
+      return{dataHora:c(0),pedido:c(1),canal:c(2),tipo:c(3),atendente:c(4),cliente:c(5),sla:c(6),status:c(9),dentroDeSLA:c(16)};
+    }).filter(d=>d.pedido);
+
+    const total=dados.length;
+    const aberto=dados.filter(d=>d.status==='Em aberto'||d.status==='Em andamento'||d.status==='Ag. retorno').length;
+    const resolvido=dados.filter(d=>d.status==='Resolvido').length;
+    const slaOk=dados.filter(d=>d.dentroDeSLA==='Sim').length;
+    const slaTot=dados.filter(d=>d.dentroDeSLA==='Sim'||d.dentroDeSLA==='Não').length;
+    const pct=slaTot>0?Math.round((slaOk/slaTot)*100)+'%':'—';
+
+    document.getElementById('p-total').textContent=total;
+    document.getElementById('p-aberto').textContent=aberto;
+    document.getElementById('p-resolvido').textContent=resolvido;
+    document.getElementById('p-sla').textContent=pct;
+    document.getElementById('p-count').textContent=total+' registros';
+
+    const porAtendente=contarPor(dados,'atendente');
+    const porCanal=contarPor(dados,'canal');
+    const porTipo=contarPor(dados,'tipo');
+    const porStatus=contarPor(dados,'status');
+    const maxA=Math.max(...Object.values(porAtendente),1);
+    const maxC=Math.max(...Object.values(porCanal),1);
+    const maxT=Math.max(...Object.values(porTipo),1);
+    const maxS=Math.max(...Object.values(porStatus),1);
+
+    renderBars('p-atendente',porAtendente,maxA);
+    renderBars('p-canal',porCanal,maxC);
+    renderBars('p-tipo',porTipo,maxT);
+    renderBars('p-status',porStatus,maxS);
+
+    const tbody=document.getElementById('p-tbody');
+    const recentes=dados.slice().reverse().slice(0,20);
+    tbody.innerHTML=recentes.map(d=>`<tr>
+      <td style="color:#555;white-space:nowrap">${d.dataHora}</td>
+      <td style="font-weight:500;color:#fff">${d.pedido}</td>
+      <td style="color:#888">${d.canal}</td>
+      <td style="color:#666">${d.tipo}</td>
+      <td>${d.atendente}</td>
+      <td><span class="p-badge ${statusBadge[d.status]||'pb-aberto'}">${d.status||'—'}</span></td>
+    </tr>`).join('');
+
+    document.getElementById('p-loading').style.display='none';
+    document.getElementById('p-conteudo').style.display='block';
+  }catch(err){
+    document.getElementById('p-loading').textContent='Erro ao carregar. Clique em ↻ Atualizar.';
+  }
 }
 </script>
 </body>
