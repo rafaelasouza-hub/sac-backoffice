@@ -217,11 +217,14 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       </select>
     </div>
     <div class="est-field">
-      <label>Tipo *</label>
-      <select id="e-tipo">
+      <label>Motivo *</label>
+      <select id="e-motivo">
         <option value="">Selecione...</option>
-        <option>Estorno</option>
-        <option>Reembolso</option>
+        <option>Negado pela Plataforma</option>
+        <option>Reembolso Parcial</option>
+        <option>Arrependimento</option>
+        <option>Falta de Estoque</option>
+        <option>Outro</option>
       </select>
     </div>
   </div>
@@ -308,11 +311,24 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   </div>
 
   <div id="p-conteudo-wrap" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <h2 style="font-size:18px;font-weight:600">Painel de indicadores</h2>
+    <button class="painel-refresh" onclick="carregarPainel()">↻ Atualizar</button>
+  </div>
+  <div id="p-loading" class="p-loading">Carregando indicadores...</div>
+  <div id="p-conteudo" style="display:none">
     <div class="cards-grid">
-      <div class="p-card purple"><div class="lbl">Total</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
+      <div class="p-card purple"><div class="lbl">Total SAC</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
       <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
       <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
       <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
+    </div>
+
+    <div class="cards-grid" style="margin-bottom:24px">
+      <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
+      <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
+      <div class="p-card green"><div class="lbl">Concluídos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
+      <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
     </div>
 
     <div class="charts-grid">
@@ -422,7 +438,7 @@ function enviarForm(){
 
 async function registrarEstorno(){
   const solicitante=document.getElementById('e-solicitante').value;
-  const tipo=document.getElementById('e-tipo').value;
+  const tipo=document.getElementById('e-motivo').value;
   const numCliente=document.getElementById('e-num-cliente').value.trim();
   const nomeCliente=document.getElementById('e-nome-cliente').value.trim();
   const valor=document.getElementById('e-valor').value.trim();
@@ -437,7 +453,7 @@ async function registrarEstorno(){
   }
   const btn=document.getElementById('e-btn');
   btn.disabled=true;btn.textContent='Registrando...';
-  const payload={tipo_registro:'estorno',solicitante,tipo_pag:tipo,
+  const payload={tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,
     num_cliente:numCliente,nome_cliente:nomeCliente,valor,
     tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,
     banco:document.getElementById('e-banco').value.trim(),
@@ -480,12 +496,12 @@ async function carregarPainel(){
   document.getElementById('p-loading').style.display='block';
   document.getElementById('p-conteudo').style.display='none';
   try{
+    // SAC
     const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q1000&headers=0`;
     const res=await fetch(url);
     const txt=await res.text();
     const json=JSON.parse(txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
     const rows=json.table.rows;
-
     const dados=rows.map(r=>{
       const c=v=>{const val=r.c[v];if(!val)return '';if(val.f)return val.f;if(typeof val.v==='string'&&val.v.startsWith('Date(')){const p=val.v.replace('Date(','').replace(')','').split(',');const d=new Date(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]),parseInt(p[3]||0),parseInt(p[4]||0));return d.toLocaleDateString('pt-BR')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}return val.v!==null?String(val.v):'';};
       return{dataHora:c(0),pedido:c(1),canal:c(2),tipo:c(3),atendente:c(4),cliente:c(5),sla:c(6),status:c(9),dentroDeSLA:c(16)};
@@ -508,19 +524,13 @@ async function carregarPainel(){
     const porCanal=contarPor(dados,'canal');
     const porTipo=contarPor(dados,'tipo');
     const porStatus=contarPor(dados,'status');
-    const maxA=Math.max(...Object.values(porAtendente),1);
-    const maxC=Math.max(...Object.values(porCanal),1);
-    const maxT=Math.max(...Object.values(porTipo),1);
-    const maxS=Math.max(...Object.values(porStatus),1);
-
-    renderBars('p-atendente',porAtendente,maxA);
-    renderBars('p-canal',porCanal,maxC);
-    renderBars('p-tipo',porTipo,maxT);
-    renderBars('p-status',porStatus,maxS);
+    renderBars('p-atendente',porAtendente,Math.max(...Object.values(porAtendente),1));
+    renderBars('p-canal',porCanal,Math.max(...Object.values(porCanal),1));
+    renderBars('p-tipo',porTipo,Math.max(...Object.values(porTipo),1));
+    renderBars('p-status',porStatus,Math.max(...Object.values(porStatus),1));
 
     const tbody=document.getElementById('p-tbody');
-    const recentes=dados.slice().reverse().slice(0,20);
-    tbody.innerHTML=recentes.map(d=>`<tr>
+    tbody.innerHTML=dados.slice().reverse().slice(0,20).map(d=>`<tr>
       <td style="color:#555;white-space:nowrap">${d.dataHora}</td>
       <td style="font-weight:500;color:#fff">${d.pedido}</td>
       <td style="color:#888">${d.canal}</td>
@@ -528,6 +538,24 @@ async function carregarPainel(){
       <td>${d.atendente}</td>
       <td><span class="p-badge ${statusBadge[d.status]||'pb-aberto'}">${d.status||'—'}</span></td>
     </tr>`).join('');
+
+    // ESTORNOS
+    try{
+      const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
+      const jsonEst=await resEst.json();
+      const estornos=jsonEst.dados||[];
+      const estTotal=estornos.length;
+      const estPend=estornos.filter(d=>d.status==='Pendente'||d.status==='⏳ Pendente').length;
+      const estConc=estornos.filter(d=>d.status==='Concluído'||d.status==='✅ Concluído').length;
+      const estValor=estornos.reduce((s,d)=>{
+        const v=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'));
+        return s+(isNaN(v)?0:v);
+      },0);
+      document.getElementById('p-est-total').textContent=estTotal;
+      document.getElementById('p-est-pend').textContent=estPend;
+      document.getElementById('p-est-conc').textContent=estConc;
+      document.getElementById('p-est-valor').textContent='R$ '+estValor.toFixed(2).replace('.',',');
+    }catch(e){}
 
     document.getElementById('p-loading').style.display='none';
     document.getElementById('p-conteudo').style.display='block';
