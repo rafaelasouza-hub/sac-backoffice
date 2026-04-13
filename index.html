@@ -344,10 +344,11 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
       <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
     </div>
 
-    <div class="cards-grid" style="margin-bottom:24px">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px">
       <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
       <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
-      <div class="p-card green"><div class="lbl">Concluídos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
+      <div class="p-card green"><div class="lbl">Pagos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
+      <div class="p-card red"><div class="lbl">Recusados</div><div class="val" id="p-est-rec">0</div><div class="sub">estornos</div></div>
       <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
     </div>
 
@@ -635,7 +636,8 @@ async function carregarPainel(){
       const estornos=jsonEst.dados||[];
       const estTotal=estornos.length;
       const estPend=estornos.filter(d=>d.status==='Pendente'||d.status==='⏳ Pendente').length;
-      const estConc=estornos.filter(d=>d.status==='Concluído'||d.status==='✅ Concluído').length;
+      const estConc=estornos.filter(d=>d.status==='Pago').length;
+      const estRec=estornos.filter(d=>d.status==='Recusado').length;
       const estValor=estornos.reduce((s,d)=>{
         const v=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'));
         return s+(isNaN(v)?0:v);
@@ -643,6 +645,7 @@ async function carregarPainel(){
       document.getElementById('p-est-total').textContent=estTotal;
       document.getElementById('p-est-pend').textContent=estPend;
       document.getElementById('p-est-conc').textContent=estConc;
+      document.getElementById('p-est-rec').textContent=estRec;
       document.getElementById('p-est-valor').textContent='R$ '+estValor.toFixed(2).replace('.',',');
     }catch(e){}
 
