@@ -635,9 +635,10 @@ async function carregarPainel(){
       const jsonEst=await resEst.json();
       const estornos=jsonEst.dados||[];
       const estTotal=estornos.length;
-      const estPend=estornos.filter(d=>d.status==='Pendente'||d.status==='⏳ Pendente').length;
-      const estConc=estornos.filter(d=>d.status==='Pago').length;
-      const estRec=estornos.filter(d=>d.status==='Recusado').length;
+      console.log('STATUS DOS ESTORNOS:', estornos.map(d=>JSON.stringify(d.status)));
+      const estPend=estornos.filter(d=>d.status.trim()==='Pendente').length;
+      const estConc=estornos.filter(d=>d.status.trim()==='Pago').length;
+      const estRec=estornos.filter(d=>d.status.trim()==='Recusado').length;
       const estValor=estornos.reduce((s,d)=>{
         const v=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'));
         return s+(isNaN(v)?0:v);
