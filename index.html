@@ -244,7 +244,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
     </div>
     <div class="est-field">
       <label>Valor R$ *</label>
-      <input type="text" id="e-valor" placeholder="Ex: 150,00">
+      <input type="text" id="e-valor" placeholder="Ex: 150,00" inputmode="numeric" oninput="mascaraValor(this)">
     </div>
   </div>
   <div class="est-field">
@@ -458,45 +458,33 @@ function enviarForm(){
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
 }
 
-function normalizarValor(v){
-  return parseFloat(String(v).replace(/[^\d,]/g,'').replace(',','.'));
+// Máscara automática: digita só números, formata como 0,00
+function mascaraValor(el){
+  let v=el.value.replace(/\D/g,'');
+  if(v.length===0){el.value='';return;}
+  el.value=(parseInt(v,10)/100).toFixed(2).replace('.',',');
 }
 
-// ✅ FUNÇÃO CORRIGIDA: converte valor em qualquer formato para número
+// parseBRL: converte qualquer formato para número
 function parseBRL(v){
   if(v===null||v===undefined||v==='') return NaN;
-  let s = String(v)
-    .replace(/\u00a0/g, '')   // remove espaço não-quebável do Sheets
-    .replace(/R\$/g, '')      // remove R$
-    .trim();
-
-  // Detecta formato: se tem vírgula após ponto (ex: 1.234,56) → BR com milhar
-  // Se tem ponto após vírgula (ex: 1,234.56) → EN
-  // Se só tem vírgula (ex: 419,90) → BR decimal
-  // Se só tem ponto (ex: 419.90) → EN decimal
-  // Se não tem nenhum (ex: 419) → inteiro
-
-  const temPonto = s.includes('.');
-  const temVirgula = s.includes(',');
-
-  if(temPonto && temVirgula){
-    const iPonto = s.lastIndexOf('.');
-    const iVirgula = s.lastIndexOf(',');
-    if(iVirgula > iPonto){
-      // formato BR: 1.234,56 → remove ponto, vírgula vira ponto
-      s = s.replace(/\./g,'').replace(',','.');
-    } else {
-      // formato EN: 1,234.56 → remove vírgula
-      s = s.replace(/,/g,'');
+  if(typeof v==='number') return v;
+  let s=String(v).replace(/\u00a0/g,'').replace(/R\$/g,'').trim();
+  const temPonto=s.includes('.');
+  const temVirgula=s.includes(',');
+  if(temPonto&&temVirgula){
+    if(s.lastIndexOf(',')>s.lastIndexOf('.')){
+      s=s.replace(/\./g,'').replace(',','.');
+    }else{
+      s=s.replace(/,/g,'');
     }
-  } else if(temVirgula && !temPonto){
-    // só vírgula: 419,90 → 419.90
-    s = s.replace(',','.');
+  }else if(temVirgula&&!temPonto){
+    s=s.replace(',','.');
   }
-  // se só tem ponto ou nenhum, já está ok para parseFloat
-
   return parseFloat(s);
 }
+
+function normalizarValor(v){ return parseBRL(v); }
 
 async function registrarEstorno(){
   const solicitante=document.getElementById('e-solicitante').value;
