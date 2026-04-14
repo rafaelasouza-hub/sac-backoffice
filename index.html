@@ -396,7 +396,7 @@ const SHEET_ID="14A4IYG2DEDqp1Jk4AK06cqxLVchSc8USUR1E94Mz9Yg";
 const SHEET_NAME="Solicitações";
 
 let tipoSel="Emissão de reversa";
-let payloadPendente=null; // guarda payload caso usuário confirme duplicidade
+let payloadPendente=null;
 
 function verificarSenha(){
   const senha=document.getElementById('p-senha').value;
@@ -458,9 +458,19 @@ function enviarForm(){
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
 }
 
-// Normaliza valor para comparação (remove R$, espaços, trata vírgula/ponto)
 function normalizarValor(v){
-  return parseFloat(String(v).replace(/[^\d,\.]/g,'').replace(',','.'));
+  return parseFloat(String(v).replace(/[^\d,]/g,'').replace(',','.'));
+}
+
+// ✅ FUNÇÃO CORRIGIDA: converte valor em formato brasileiro para número
+function parseBRL(v){
+  return parseFloat(
+    String(v)
+      .replace(/R\$\s*/g, '')  // remove R$
+      .trim()
+      .replace(/\./g, '')       // remove ponto de milhar (ex: 4.199 → 4199)
+      .replace(',', '.')        // vírgula decimal vira ponto (ex: 419,90 → 419.90)
+  );
 }
 
 async function registrarEstorno(){
@@ -484,7 +494,6 @@ async function registrarEstorno(){
   const btn=document.getElementById('e-btn');
   btn.disabled=true;btn.textContent='Verificando...';
 
-  // Monta payload
   const payload={
     tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,
     num_cliente:numCliente,nome_cliente:nomeCliente,valor,
@@ -496,12 +505,10 @@ async function registrarEstorno(){
     observacoes:document.getElementById('e-obs-est').value.trim()
   };
 
-  // Verificar duplicidade antes de enviar
   try{
     const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
     const jsonEst=await resEst.json();
     const estornos=jsonEst.dados||[];
-    const valorNovo=normalizarValor(valor);
 
     const duplicata=estornos.find(e=>{
       const mesmoPedido=String(e.num_cliente).trim().toLowerCase()===String(numCliente).trim().toLowerCase();
@@ -511,7 +518,6 @@ async function registrarEstorno(){
     });
 
     if(duplicata){
-      // Mostrar alerta de duplicidade
       document.getElementById('dup-cliente-num').textContent='Nº pedido '+duplicata.num_cliente;
       document.getElementById('dup-valor').textContent=duplicata.chave_pix;
       document.getElementById('dup-nome-cliente').textContent=duplicata.nome_cliente;
@@ -529,7 +535,6 @@ async function registrarEstorno(){
     // Se falhar a verificação, permite enviar normalmente
   }
 
-  // Sem duplicidade — envia direto
   await enviarEstorno(payload, btn);
 }
 
@@ -635,14 +640,17 @@ async function carregarPainel(){
       const jsonEst=await resEst.json();
       const estornos=jsonEst.dados||[];
       const estTotal=estornos.length;
-      console.log('STATUS DOS ESTORNOS:', estornos.map(d=>JSON.stringify(d.status)));
+
       const estPend=estornos.filter(d=>d.status.trim()==='Pendente').length;
       const estConc=estornos.filter(d=>d.status.trim()==='Pago').length;
       const estRec=estornos.filter(d=>d.status.trim()==='Recusado').length;
+
+      // ✅ BUG CORRIGIDO: usa parseBRL que trata ponto de milhar corretamente
       const estValor=estornos.reduce((s,d)=>{
-        const v=parseFloat(String(d.valor).replace(/[^\d,]/g,'').replace(',','.'));
+        const v=parseBRL(d.valor);
         return s+(isNaN(v)?0:v);
       },0);
+
       document.getElementById('p-est-total').textContent=estTotal;
       document.getElementById('p-est-pend').textContent=estPend;
       document.getElementById('p-est-conc').textContent=estConc;
