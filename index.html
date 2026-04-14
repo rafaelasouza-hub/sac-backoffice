@@ -462,15 +462,40 @@ function normalizarValor(v){
   return parseFloat(String(v).replace(/[^\d,]/g,'').replace(',','.'));
 }
 
-// ✅ FUNÇÃO CORRIGIDA: converte valor em formato brasileiro para número
+// ✅ FUNÇÃO CORRIGIDA: converte valor em qualquer formato para número
 function parseBRL(v){
-  return parseFloat(
-    String(v)
-      .replace(/R\$\s*/g, '')  // remove R$
-      .trim()
-      .replace(/\./g, '')       // remove ponto de milhar (ex: 4.199 → 4199)
-      .replace(',', '.')        // vírgula decimal vira ponto (ex: 419,90 → 419.90)
-  );
+  if(v===null||v===undefined||v==='') return NaN;
+  let s = String(v)
+    .replace(/\u00a0/g, '')   // remove espaço não-quebável do Sheets
+    .replace(/R\$/g, '')      // remove R$
+    .trim();
+
+  // Detecta formato: se tem vírgula após ponto (ex: 1.234,56) → BR com milhar
+  // Se tem ponto após vírgula (ex: 1,234.56) → EN
+  // Se só tem vírgula (ex: 419,90) → BR decimal
+  // Se só tem ponto (ex: 419.90) → EN decimal
+  // Se não tem nenhum (ex: 419) → inteiro
+
+  const temPonto = s.includes('.');
+  const temVirgula = s.includes(',');
+
+  if(temPonto && temVirgula){
+    const iPonto = s.lastIndexOf('.');
+    const iVirgula = s.lastIndexOf(',');
+    if(iVirgula > iPonto){
+      // formato BR: 1.234,56 → remove ponto, vírgula vira ponto
+      s = s.replace(/\./g,'').replace(',','.');
+    } else {
+      // formato EN: 1,234.56 → remove vírgula
+      s = s.replace(/,/g,'');
+    }
+  } else if(temVirgula && !temPonto){
+    // só vírgula: 419,90 → 419.90
+    s = s.replace(',','.');
+  }
+  // se só tem ponto ou nenhum, já está ok para parseFloat
+
+  return parseFloat(s);
 }
 
 async function registrarEstorno(){
