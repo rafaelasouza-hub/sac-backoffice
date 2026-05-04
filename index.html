@@ -60,8 +60,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .est-msg{display:none;border-radius:8px;padding:12px 16px;font-size:14px;margin-top:1rem}
 .est-msg-ok{background:#0d2a1a;border:1px solid #166534;color:#4ade80}
 .est-msg-err{background:#2a0d0d;border:1px solid #991b1b;color:#f87171}
-
-/* ALERTA DUPLICIDADE */
 .est-msg-dup{background:#2a1f00;border:1px solid #a16207;color:#fbbf24;border-radius:8px;padding:14px 16px;font-size:13px;margin-top:1rem;display:none;line-height:1.6}
 .est-msg-dup strong{display:block;font-size:14px;margin-bottom:6px}
 .dup-actions{display:flex;gap:8px;margin-top:12px}
@@ -72,10 +70,27 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 
 /* PAINEL */
 .painel-container{padding:24px;max-width:1200px;margin:0 auto}
-.painel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap}
-.painel-header h2{font-size:18px;font-weight:600}
+.painel-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.painel-topbar h2{font-size:18px;font-weight:600}
 .painel-refresh{padding:6px 14px;font-size:12px;border:1px solid #333;border-radius:20px;background:transparent;color:#888;cursor:pointer;transition:all .15s}
 .painel-refresh:hover{color:#fff;border-color:#555}
+
+/* FILTRO DE DATAS */
+.filtro-bar{background:#111;border:1px solid #222;border-radius:12px;padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.filtro-bar label{font-size:11px;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
+.filtro-atalhos{display:flex;gap:6px;flex-wrap:wrap}
+.filtro-atalho{padding:5px 12px;font-size:12px;border:1px solid #2a2a2a;border-radius:20px;background:transparent;color:#666;cursor:pointer;transition:all .15s}
+.filtro-atalho:hover{color:#fff;border-color:#444}
+.filtro-atalho.ativo{background:#1e1033;border-color:#7c3aed;color:#a855f7;font-weight:500}
+.filtro-sep{width:1px;height:24px;background:#222;flex-shrink:0}
+.filtro-datas{display:flex;align-items:center;gap:8px}
+.filtro-datas input[type=date]{padding:5px 10px;font-size:12px;border:1px solid #2a2a2a;border-radius:8px;background:#0a0a0a;color:#aaa;font-family:inherit;cursor:pointer}
+.filtro-datas input[type=date]:focus{outline:none;border-color:#7c3aed}
+.filtro-datas span{font-size:12px;color:#444}
+.filtro-aplicar{padding:5px 14px;font-size:12px;font-weight:600;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;cursor:pointer;transition:opacity .15s}
+.filtro-aplicar:hover{opacity:0.85}
+.filtro-periodo-label{font-size:11px;color:#444;white-space:nowrap}
+
 .cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 .p-card{background:#111;border:1px solid #222;border-radius:12px;padding:16px 20px}
 .p-card .lbl{font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
@@ -92,8 +107,43 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .bar-label{font-size:12px;color:#888;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bar-wrap{flex:1;background:#1a1a1a;border-radius:4px;height:8px;overflow:hidden}
 .bar-fill{height:8px;border-radius:4px;background:linear-gradient(90deg,#7c3aed,#a855f7);transition:width .5s}
+.bar-fill.green{background:linear-gradient(90deg,#059669,#4ade80)}
+.bar-fill.amber{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.bar-fill.red{background:linear-gradient(90deg,#dc2626,#f87171)}
 .bar-count{font-size:12px;color:#666;min-width:20px;text-align:right}
-.tbl-recentes{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden}
+.bar-valor{font-size:11px;color:#444;min-width:70px;text-align:right}
+
+/* GRÁFICO MÊS A MÊS */
+.mensal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.mensal-chart-wrap{display:flex;flex-direction:column;gap:8px}
+.mes-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.mes-label{font-size:12px;color:#888;min-width:64px;white-space:nowrap}
+.mes-bars{flex:1;display:flex;flex-direction:column;gap:3px}
+.mes-bar-qty{height:10px;border-radius:3px;background:linear-gradient(90deg,#7c3aed,#a855f7);transition:width .6s;min-width:2px}
+.mes-bar-val{height:10px;border-radius:3px;background:linear-gradient(90deg,#0e7490,#22d3ee);transition:width .6s;min-width:2px}
+.mes-nums{display:flex;flex-direction:column;gap:3px;min-width:72px;text-align:right}
+.mes-num-qty{font-size:11px;color:#a855f7;font-weight:500}
+.mes-num-val{font-size:11px;color:#22d3ee}
+.legenda-bar{display:flex;gap:16px;margin-bottom:12px}
+.legenda-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555}
+.legenda-dot{width:10px;height:6px;border-radius:3px}
+.legenda-dot.purple{background:linear-gradient(90deg,#7c3aed,#a855f7)}
+.legenda-dot.cyan{background:linear-gradient(90deg,#0e7490,#22d3ee)}
+
+/* MOTIVOS ESTORNO */
+.motivos-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.motivos-header h4{font-size:12px;font-weight:500;color:#555;text-transform:uppercase;letter-spacing:0.5px}
+.motivo-pct{font-size:11px;color:#333}
+.motivo-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.motivo-rank{font-size:10px;font-weight:700;color:#333;min-width:16px;text-align:center}
+.motivo-label{font-size:12px;color:#888;min-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.motivo-bar-wrap{flex:1;background:#1a1a1a;border-radius:4px;height:8px;overflow:hidden}
+.motivo-bar-fill{height:8px;border-radius:4px;transition:width .5s}
+.motivo-colors{--c0:linear-gradient(90deg,#7c3aed,#a855f7);--c1:linear-gradient(90deg,#0e7490,#22d3ee);--c2:linear-gradient(90deg,#d97706,#fbbf24);--c3:linear-gradient(90deg,#dc2626,#f87171);--c4:linear-gradient(90deg,#059669,#4ade80)}
+.motivo-count{font-size:12px;color:#666;min-width:20px;text-align:right}
+.motivo-pct-inline{font-size:10px;color:#333;min-width:32px;text-align:right}
+
+.tbl-recentes{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden;margin-bottom:24px}
 .tbl-recentes-header{padding:14px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
 .tbl-recentes-header h4{font-size:13px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.5px}
 .p-tbl{width:100%;border-collapse:collapse;font-size:12px}
@@ -107,10 +157,21 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .pb-ag{background:#1a1a0a;color:#a3a300}
 .pb-resolvido{background:#0d2a1a;color:#4ade80}
 .pb-cancelado{background:#2a0d0d;color:#f87171}
+.pb-pendente{background:#2a1a0d;color:#fb923c}
+.pb-pago{background:#0d2a1a;color:#4ade80}
+.pb-recusado{background:#2a0d0d;color:#f87171}
 .p-loading{text-align:center;padding:3rem;color:#333;font-size:13px}
+.p-sem-dados{text-align:center;padding:2rem;color:#333;font-size:13px;font-style:italic}
+
+/* TABELA ESTORNOS DETALHADA */
+.tbl-estornos-wrap{margin-top:24px}
+
 @media(max-width:900px){
   .cards-grid{grid-template-columns:repeat(2,1fr)}
   .charts-grid{grid-template-columns:1fr}
+  .mensal-grid{grid-template-columns:1fr}
+  .filtro-bar{flex-direction:column;align-items:flex-start}
+  .filtro-sep{display:none}
 }
 </style>
 </head>
@@ -299,8 +360,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   <button class="est-btn" id="e-btn" onclick="registrarEstorno()">Registrar estorno</button>
   <div class="est-msg est-msg-ok" id="e-msg-ok">✅ Registrado com sucesso!</div>
   <div class="est-msg est-msg-err" id="e-msg-err">❌ Preencha os campos obrigatórios.</div>
-
-  <!-- ALERTA DE DUPLICIDADE -->
   <div class="est-msg-dup" id="e-msg-dup">
     <strong>⚠️ Possível duplicidade detectada!</strong>
     Já existe um estorno com o pedido <span id="dup-cliente-num"></span>, chave PIX <span id="dup-valor"></span> e cliente <span id="dup-nome-cliente"></span>.<br>
@@ -331,64 +390,134 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
   </div>
 
   <div id="p-conteudo-wrap" style="display:none">
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
-    <h2 style="font-size:18px;font-weight:600">Painel de indicadores</h2>
-    <button class="painel-refresh" onclick="carregarPainel()">↻ Atualizar</button>
-  </div>
-  <div id="p-loading" class="p-loading">Carregando indicadores...</div>
-  <div id="p-conteudo" style="display:none">
-    <div class="cards-grid">
-      <div class="p-card purple"><div class="lbl">Total SAC</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
-      <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
-      <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
-      <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
+
+    <!-- TOPBAR -->
+    <div class="painel-topbar">
+      <h2>Painel de indicadores</h2>
+      <button class="painel-refresh" onclick="aplicarFiltroECarregar()">↻ Atualizar</button>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px">
-      <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
-      <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
-      <div class="p-card green"><div class="lbl">Pagos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
-      <div class="p-card red"><div class="lbl">Recusados</div><div class="val" id="p-est-rec">0</div><div class="sub">estornos</div></div>
-      <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
+    <!-- FILTRO DE DATAS -->
+    <div class="filtro-bar">
+      <label>Período</label>
+      <div class="filtro-atalhos">
+        <button class="filtro-atalho" onclick="aplicarAtalho('hoje',this)">Hoje</button>
+        <button class="filtro-atalho" onclick="aplicarAtalho('7d',this)">7 dias</button>
+        <button class="filtro-atalho" onclick="aplicarAtalho('30d',this)">30 dias</button>
+        <button class="filtro-atalho" onclick="aplicarAtalho('mesAtual',this)">Mês atual</button>
+        <button class="filtro-atalho" onclick="aplicarAtalho('mesAnterior',this)">Mês anterior</button>
+        <button class="filtro-atalho ativo" onclick="aplicarAtalho('tudo',this)">Tudo</button>
+      </div>
+      <div class="filtro-sep"></div>
+      <div class="filtro-datas">
+        <input type="date" id="filtro-de" title="Data inicial">
+        <span>até</span>
+        <input type="date" id="filtro-ate" title="Data final">
+        <button class="filtro-aplicar" onclick="aplicarFiltroCostom()">Aplicar</button>
+      </div>
+      <span class="filtro-periodo-label" id="filtro-label">Todos os registros</span>
     </div>
 
-    <div class="charts-grid">
-      <div class="p-chart">
-        <h4>Por atendente</h4>
-        <div id="p-atendente"></div>
-      </div>
-      <div class="p-chart">
-        <h4>Por canal</h4>
-        <div id="p-canal"></div>
-      </div>
-      <div class="p-chart">
-        <h4>Por tipo</h4>
-        <div id="p-tipo"></div>
-      </div>
-      <div class="p-chart">
-        <h4>Por status</h4>
-        <div id="p-status"></div>
-      </div>
-    </div>
+    <div id="p-loading" class="p-loading">Carregando indicadores...</div>
+    <div id="p-conteudo" style="display:none">
 
-    <div class="tbl-recentes">
-      <div class="tbl-recentes-header">
-        <h4>Últimas solicitações</h4>
-        <span id="p-count" style="font-size:12px;color:#444"></span>
+      <!-- CARDS SAC -->
+      <div class="cards-grid">
+        <div class="p-card purple"><div class="lbl">Total SAC</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
+        <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
+        <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
+        <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
       </div>
-      <div style="overflow-x:auto">
-        <table class="p-tbl">
-          <thead><tr>
-            <th>Data/Hora</th><th>Pedido</th><th>Canal</th>
-            <th>Tipo</th><th>Atendente</th><th>Status</th>
-          </tr></thead>
-          <tbody id="p-tbody"></tbody>
-        </table>
+
+      <!-- CARDS ESTORNOS -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px">
+        <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
+        <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
+        <div class="p-card green"><div class="lbl">Pagos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
+        <div class="p-card red"><div class="lbl">Recusados</div><div class="val" id="p-est-rec">0</div><div class="sub">estornos</div></div>
+        <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
       </div>
-    </div>
-  </div>
-</div>
-</div>
+
+      <!-- GRÁFICOS MÊS A MÊS -->
+      <div class="mensal-grid">
+        <div class="p-chart">
+          <div class="motivos-header">
+            <h4>Estornos por mês</h4>
+          </div>
+          <div class="legenda-bar">
+            <div class="legenda-item"><div class="legenda-dot purple"></div> Qtd. estornos</div>
+            <div class="legenda-item"><div class="legenda-dot cyan"></div> Valor (R$)</div>
+          </div>
+          <div id="p-mensal-chart" class="mensal-chart-wrap"></div>
+        </div>
+
+        <div class="p-chart motivo-colors">
+          <div class="motivos-header">
+            <h4>Principais motivos de estorno</h4>
+            <span class="motivo-pct" id="p-motivos-total"></span>
+          </div>
+          <div id="p-motivos-chart"></div>
+        </div>
+      </div>
+
+      <!-- GRÁFICOS SAC -->
+      <div class="charts-grid">
+        <div class="p-chart">
+          <h4>Por atendente</h4>
+          <div id="p-atendente"></div>
+        </div>
+        <div class="p-chart">
+          <h4>Por canal</h4>
+          <div id="p-canal"></div>
+        </div>
+        <div class="p-chart">
+          <h4>Por tipo</h4>
+          <div id="p-tipo"></div>
+        </div>
+        <div class="p-chart">
+          <h4>Por status</h4>
+          <div id="p-status"></div>
+        </div>
+      </div>
+
+      <!-- TABELA ÚLTIMAS SOLICITAÇÕES SAC -->
+      <div class="tbl-recentes">
+        <div class="tbl-recentes-header">
+          <h4>Últimas solicitações SAC</h4>
+          <span id="p-count" style="font-size:12px;color:#444"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="p-tbl">
+            <thead><tr>
+              <th>Data/Hora</th><th>Pedido</th><th>Canal</th>
+              <th>Tipo</th><th>Atendente</th><th>Status</th>
+            </tr></thead>
+            <tbody id="p-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TABELA ESTORNOS DETALHADA -->
+      <div class="tbl-recentes tbl-estornos-wrap">
+        <div class="tbl-recentes-header">
+          <h4>Estornos no período</h4>
+          <span id="p-est-count" style="font-size:12px;color:#444"></span>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="p-tbl">
+            <thead><tr>
+              <th>Data</th><th>Pedido</th><th>Cliente</th>
+              <th>Motivo</th><th>Valor</th><th>Solicitante</th><th>Status</th>
+            </tr></thead>
+            <tbody id="p-est-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /p-conteudo -->
+  </div><!-- /p-conteudo-wrap -->
+</div><!-- /painel-container -->
+</div><!-- /tab-painel -->
 
 <script>
 const SCRIPT_URL="https://script.google.com/macros/s/AKfycbyipif36QYAntfC5FxN6_-A1oSuxZMd42dlfGmCN-ydy5dw_IDSjYBwvq8Mk3-XqVeE/exec";
@@ -397,23 +526,28 @@ const SHEET_NAME="Solicitações";
 
 let tipoSel="Emissão de reversa";
 let payloadPendente=null;
+let filtroAtivo={de:null,ate:null};
+let dadosSACGlobal=[];
+let dadosEstornosGlobal=[];
 
+// ─────────────── SENHA ───────────────
 function verificarSenha(){
   const senha=document.getElementById('p-senha').value;
   if(senha==='RafaCellfy2021'){
     document.getElementById('p-login').style.display='none';
     document.getElementById('p-conteudo-wrap').style.display='block';
-    carregarPainel();
+    aplicarAtalhoSilencioso('tudo');
+    aplicarFiltroECarregar();
   } else {
     document.getElementById('p-senha-erro').style.display='block';
     document.getElementById('p-senha').value='';
   }
 }
 
+// ─────────────── TABS ───────────────
 function trocarTab(aba){
   document.querySelectorAll('.tab-nav-btn').forEach((b,i)=>b.classList.toggle('active',['sac','estornos','painel'][i]===aba));
   document.querySelectorAll('.tab-page').forEach(p=>p.classList.toggle('active',p.id==='tab-'+aba));
-  if(aba==='painel') carregarPainel();
 }
 
 function selTipo(btn){
@@ -426,6 +560,7 @@ function getNow(){
   return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
 }
 
+// ─────────────── FORM SAC ───────────────
 function enviarForm(){
   const pedido=document.getElementById('f-pedido').value.trim();
   const canal=document.getElementById('f-canal').value;
@@ -458,34 +593,23 @@ function enviarForm(){
   .finally(()=>{btn.disabled=false;btn.textContent='Enviar solicitação';});
 }
 
-// Máscara automática: digita só números, formata como 0,00
+// ─────────────── VALORES ───────────────
 function mascaraValor(el){
   let v=el.value.replace(/\D/g,'');
   if(v.length===0){el.value='';return;}
   el.value=(parseInt(v,10)/100).toFixed(2).replace('.',',');
 }
-
-// parseBRL: converte qualquer formato para número
 function parseBRL(v){
   if(v===null||v===undefined||v==='') return NaN;
   if(typeof v==='number') return v;
   let s=String(v).replace(/\u00a0/g,'').replace(/R\$/g,'').trim();
-  const temPonto=s.includes('.');
-  const temVirgula=s.includes(',');
-  if(temPonto&&temVirgula){
-    if(s.lastIndexOf(',')>s.lastIndexOf('.')){
-      s=s.replace(/\./g,'').replace(',','.');
-    }else{
-      s=s.replace(/,/g,'');
-    }
-  }else if(temVirgula&&!temPonto){
-    s=s.replace(',','.');
-  }
+  const temPonto=s.includes('.');const temVirgula=s.includes(',');
+  if(temPonto&&temVirgula){if(s.lastIndexOf(',')>s.lastIndexOf('.')){s=s.replace(/\./g,'').replace(',','.');}else{s=s.replace(/,/g,'');}}
+  else if(temVirgula&&!temPonto){s=s.replace(',','.');}
   return parseFloat(s);
 }
 
-function normalizarValor(v){ return parseBRL(v); }
-
+// ─────────────── ESTORNOS FORM ───────────────
 async function registrarEstorno(){
   const solicitante=document.getElementById('e-solicitante').value;
   const tipo=document.getElementById('e-motivo').value;
@@ -495,7 +619,6 @@ async function registrarEstorno(){
   const tipoPix=document.getElementById('e-tipo-pix').value;
   const chavePix=document.getElementById('e-chave-pix').value.trim();
   const nomeTitular=document.getElementById('e-nome-titular').value.trim();
-
   if(!solicitante||!tipo||!numCliente||!nomeCliente||!valor||!tipoPix||!chavePix||!nomeTitular){
     document.getElementById('e-msg-err').style.display='block';
     document.getElementById('e-msg-ok').style.display='none';
@@ -503,33 +626,16 @@ async function registrarEstorno(){
     setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
     return;
   }
-
   const btn=document.getElementById('e-btn');
   btn.disabled=true;btn.textContent='Verificando...';
-
-  const payload={
-    tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,
-    num_cliente:numCliente,nome_cliente:nomeCliente,valor,
-    tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,
-    banco:document.getElementById('e-banco').value.trim(),
-    agencia:document.getElementById('e-agencia').value.trim(),
-    conta:document.getElementById('e-conta').value.trim(),
-    cpf_cnpj:document.getElementById('e-cpf-cnpj').value.trim(),
-    observacoes:document.getElementById('e-obs-est').value.trim()
-  };
-
+  const payload={tipo_registro:'estorno',solicitante,tipo_pag:'Estorno',motivo:tipo,num_cliente:numCliente,nome_cliente:nomeCliente,valor,tipo_pix:tipoPix,chave_pix:chavePix,nome_titular:nomeTitular,banco:document.getElementById('e-banco').value.trim(),agencia:document.getElementById('e-agencia').value.trim(),conta:document.getElementById('e-conta').value.trim(),cpf_cnpj:document.getElementById('e-cpf-cnpj').value.trim(),observacoes:document.getElementById('e-obs-est').value.trim()};
   try{
     const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
     const jsonEst=await resEst.json();
     const estornos=jsonEst.dados||[];
-
     const duplicata=estornos.find(e=>{
-      const mesmoPedido=String(e.num_cliente).trim().toLowerCase()===String(numCliente).trim().toLowerCase();
-      const mesmaChave=String(e.chave_pix).trim().toLowerCase()===String(chavePix).trim().toLowerCase();
-      const mesmoNome=String(e.nome_cliente).trim().toLowerCase()===String(nomeCliente).trim().toLowerCase();
-      return mesmoPedido && mesmaChave && mesmoNome;
+      return String(e.num_cliente).trim().toLowerCase()===String(numCliente).trim().toLowerCase()&&String(e.chave_pix).trim().toLowerCase()===String(chavePix).trim().toLowerCase()&&String(e.nome_cliente).trim().toLowerCase()===String(nomeCliente).trim().toLowerCase();
     });
-
     if(duplicata){
       document.getElementById('dup-cliente-num').textContent='Nº pedido '+duplicata.num_cliente;
       document.getElementById('dup-valor').textContent=duplicata.chave_pix;
@@ -540,18 +646,12 @@ async function registrarEstorno(){
       document.getElementById('e-msg-dup').style.display='block';
       document.getElementById('e-msg-err').style.display='none';
       document.getElementById('e-msg-ok').style.display='none';
-      payloadPendente=payload;
-      btn.disabled=false;btn.textContent='Registrar estorno';
-      return;
+      payloadPendente=payload;btn.disabled=false;btn.textContent='Registrar estorno';return;
     }
-  }catch(e){
-    // Se falhar a verificação, permite enviar normalmente
-  }
-
-  await enviarEstorno(payload, btn);
+  }catch(e){}
+  await enviarEstorno(payload,btn);
 }
-
-async function enviarEstorno(payload, btn){
+async function enviarEstorno(payload,btn){
   if(!btn) btn=document.getElementById('e-btn');
   btn.disabled=true;btn.textContent='Registrando...';
   try{
@@ -565,114 +665,249 @@ async function enviarEstorno(payload, btn){
     document.getElementById('e-msg-err').style.display='block';
     setTimeout(()=>document.getElementById('e-msg-err').style.display='none',4000);
   }
-  btn.disabled=false;btn.textContent='Registrar estorno';
-  payloadPendente=null;
+  btn.disabled=false;btn.textContent='Registrar estorno';payloadPendente=null;
+}
+function cancelarDup(){document.getElementById('e-msg-dup').style.display='none';payloadPendente=null;}
+async function confirmarDup(){if(!payloadPendente)return;document.getElementById('e-msg-dup').style.display='none';await enviarEstorno(payloadPendente);}
+function limparFormEstorno(){['e-solicitante','e-motivo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix','e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});}
+
+// ─────────────── FILTROS ───────────────
+function toISO(dd_mm_yyyy_hhmm){
+  // "25/03/2026 16:26" ou "25/03/2026 16:26:45"
+  if(!dd_mm_yyyy_hhmm) return null;
+  const partes=String(dd_mm_yyyy_hhmm).trim().split(' ');
+  const dateParts=partes[0].split('/');
+  if(dateParts.length<3) return null;
+  const [d,m,y]=dateParts;
+  return new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}T00:00:00`);
 }
 
-function cancelarDup(){
-  document.getElementById('e-msg-dup').style.display='none';
-  payloadPendente=null;
+function dentroDoFiltro(dataStr){
+  if(!filtroAtivo.de && !filtroAtivo.ate) return true;
+  const d=toISO(dataStr);
+  if(!d) return true;
+  if(filtroAtivo.de && d < filtroAtivo.de) return false;
+  if(filtroAtivo.ate){
+    const ateEnd=new Date(filtroAtivo.ate);
+    ateEnd.setDate(ateEnd.getDate()+1);
+    if(d >= ateEnd) return false;
+  }
+  return true;
 }
 
-async function confirmarDup(){
-  if(!payloadPendente) return;
-  document.getElementById('e-msg-dup').style.display='none';
-  await enviarEstorno(payloadPendente);
+function fmtDate(dt){return dt.toLocaleDateString('pt-BR');}
+
+function aplicarAtalhoSilencioso(tipo){
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  let de=null,ate=null,label='Todos os registros';
+  if(tipo==='hoje'){de=new Date(hoje);ate=new Date(hoje);label='Hoje';}
+  else if(tipo==='7d'){de=new Date(hoje);de.setDate(de.getDate()-6);ate=new Date(hoje);label='Últimos 7 dias';}
+  else if(tipo==='30d'){de=new Date(hoje);de.setDate(de.getDate()-29);ate=new Date(hoje);label='Últimos 30 dias';}
+  else if(tipo==='mesAtual'){de=new Date(hoje.getFullYear(),hoje.getMonth(),1);ate=new Date(hoje);label='Mês atual';}
+  else if(tipo==='mesAnterior'){const m=hoje.getMonth()-1;const y=m<0?hoje.getFullYear()-1:hoje.getFullYear();const mm=m<0?11:m;de=new Date(y,mm,1);ate=new Date(y,mm+1,0);label=de.toLocaleDateString('pt-BR',{month:'long',year:'numeric'});}
+  else{de=null;ate=null;label='Todos os registros';}
+  filtroAtivo={de,ate};
+  document.getElementById('filtro-label').textContent=label;
+  if(de) document.getElementById('filtro-de').value=de.toISOString().slice(0,10);
+  else document.getElementById('filtro-de').value='';
+  if(ate) document.getElementById('filtro-ate').value=ate.toISOString().slice(0,10);
+  else document.getElementById('filtro-ate').value='';
 }
 
-function limparFormEstorno(){
-  ['e-solicitante','e-motivo','e-num-cliente','e-nome-cliente','e-valor','e-tipo-pix',
-   'e-chave-pix','e-nome-titular','e-banco','e-agencia','e-conta','e-cpf-cnpj','e-obs-est']
-  .forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+function aplicarAtalho(tipo,btn){
+  document.querySelectorAll('.filtro-atalho').forEach(b=>b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  aplicarAtalhoSilencioso(tipo);
+  renderPainel();
 }
 
-function contarPor(dados,campo){
-  return dados.reduce((a,d)=>{const k=d[campo]||'—';a[k]=(a[k]||0)+1;return a;},{});
+function aplicarFiltroCostom(){
+  const de=document.getElementById('filtro-de').value;
+  const ate=document.getElementById('filtro-ate').value;
+  filtroAtivo.de=de?new Date(de+'T00:00:00'):null;
+  filtroAtivo.ate=ate?new Date(ate+'T00:00:00'):null;
+  document.querySelectorAll('.filtro-atalho').forEach(b=>b.classList.remove('ativo'));
+  const label=de||ate?(de?fmtDate(new Date(de+'T12:00:00')):'início')+' → '+(ate?fmtDate(new Date(ate+'T12:00:00')):'hoje'):'Todos os registros';
+  document.getElementById('filtro-label').textContent=label;
+  renderPainel();
 }
 
+function aplicarFiltroECarregar(){
+  carregarPainel();
+}
+
+// ─────────────── RENDER ───────────────
+function contarPor(dados,campo){return dados.reduce((a,d)=>{const k=d[campo]||'—';a[k]=(a[k]||0)+1;return a;},{});}
 function renderBars(containerId,dados,max){
   const el=document.getElementById(containerId);
-  el.innerHTML=Object.entries(dados).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`
-    <div class="bar-row">
-      <span class="bar-label" title="${k}">${k}</span>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((v/max)*100)}%"></div></div>
-      <span class="bar-count">${v}</span>
+  if(!el) return;
+  const entries=Object.entries(dados).sort((a,b)=>b[1]-a[1]);
+  if(entries.length===0){el.innerHTML='<div class="p-sem-dados">Sem dados no período</div>';return;}
+  el.innerHTML=entries.map(([k,v])=>`<div class="bar-row"><span class="bar-label" title="${k}">${k}</span><div class="bar-wrap"><div class="bar-fill" style="width:${Math.round((v/max)*100)}%"></div></div><span class="bar-count">${v}</span></div>`).join('');
+}
+const statusBadge={'Em aberto':'pb-aberto','Em andamento':'pb-andamento','Ag. retorno':'pb-ag','Resolvido':'pb-resolvido','Cancelado':'pb-cancelado','Pendente':'pb-pendente','Pago':'pb-pago','Recusado':'pb-recusado'};
+
+function renderMensalChart(estornos){
+  const el=document.getElementById('p-mensal-chart');
+  if(!el) return;
+  const porMes={};
+  estornos.forEach(e=>{
+    const data=toISO(e.data||e.dataHora);
+    if(!data) return;
+    const key=data.getFullYear()+'-'+String(data.getMonth()+1).padStart(2,'0');
+    if(!porMes[key]){porMes[key]={label:'',qty:0,valor:0};}
+    porMes[key].qty++;
+    const v=parseBRL(e.valor);
+    if(!isNaN(v)) porMes[key].valor+=v;
+    if(!porMes[key].label){
+      const d=new Date(data.getFullYear(),data.getMonth(),1);
+      porMes[key].label=d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}).replace('.','');
+    }
+  });
+  const entries=Object.entries(porMes).sort((a,b)=>a[0].localeCompare(b[0]));
+  if(entries.length===0){el.innerHTML='<div class="p-sem-dados">Sem estornos no período</div>';return;}
+  const maxQty=Math.max(...entries.map(([,v])=>v.qty),1);
+  const maxVal=Math.max(...entries.map(([,v])=>v.valor),1);
+  el.innerHTML=entries.map(([,v])=>`
+    <div class="mes-row">
+      <span class="mes-label">${v.label}</span>
+      <div class="mes-bars">
+        <div class="mes-bar-qty" style="width:${Math.round((v.qty/maxQty)*100)}%"></div>
+        <div class="mes-bar-val" style="width:${Math.round((v.valor/maxVal)*100)}%"></div>
+      </div>
+      <div class="mes-nums">
+        <span class="mes-num-qty">${v.qty} est.</span>
+        <span class="mes-num-val">R$ ${v.valor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>
+      </div>
     </div>`).join('');
 }
 
-const statusBadge={'Em aberto':'pb-aberto','Em andamento':'pb-andamento','Ag. retorno':'pb-ag','Resolvido':'pb-resolvido','Cancelado':'pb-cancelado'};
+function renderMotivos(estornos){
+  const el=document.getElementById('p-motivos-chart');
+  const totalEl=document.getElementById('p-motivos-total');
+  if(!el) return;
+  // coluna motivo/tipo
+  const porMotivo={};
+  estornos.forEach(e=>{
+    const m=e.motivo||e.tipo||e.tipo_pag||'—';
+    porMotivo[m]=(porMotivo[m]||0)+1;
+  });
+  const entries=Object.entries(porMotivo).sort((a,b)=>b[1]-a[1]);
+  if(entries.length===0){el.innerHTML='<div class="p-sem-dados">Sem estornos no período</div>';if(totalEl)totalEl.textContent='';return;}
+  const total=entries.reduce((s,[,v])=>s+v,0);
+  if(totalEl) totalEl.textContent=total+' registros';
+  const cores=['var(--c0)','var(--c1)','var(--c2)','var(--c3)','var(--c4)'];
+  const max=entries[0][1];
+  el.innerHTML=entries.map(([k,v],i)=>`
+    <div class="motivo-row">
+      <span class="motivo-rank">${i+1}</span>
+      <span class="motivo-label" title="${k}">${k}</span>
+      <div class="motivo-bar-wrap"><div class="motivo-bar-fill" style="width:${Math.round((v/max)*100)}%;background:${cores[i%cores.length]}"></div></div>
+      <span class="motivo-count">${v}</span>
+      <span class="motivo-pct-inline">${Math.round((v/total)*100)}%</span>
+    </div>`).join('');
+}
 
+function renderPainel(){
+  const sacFiltrado=dadosSACGlobal.filter(d=>dentroDoFiltro(d.dataHora));
+  const estFiltrado=dadosEstornosGlobal.filter(d=>dentroDoFiltro(d.data||d.dataHora));
+
+  // KPIs SAC
+  const total=sacFiltrado.length;
+  const aberto=sacFiltrado.filter(d=>d.status==='Em aberto'||d.status==='Em andamento'||d.status==='Ag. retorno').length;
+  const resolvido=sacFiltrado.filter(d=>d.status==='Resolvido').length;
+  const slaOk=sacFiltrado.filter(d=>d.dentroDeSLA==='Sim').length;
+  const slaTot=sacFiltrado.filter(d=>d.dentroDeSLA==='Sim'||d.dentroDeSLA==='Não').length;
+  const pct=slaTot>0?Math.round((slaOk/slaTot)*100)+'%':'—';
+  document.getElementById('p-total').textContent=total;
+  document.getElementById('p-aberto').textContent=aberto;
+  document.getElementById('p-resolvido').textContent=resolvido;
+  document.getElementById('p-sla').textContent=pct;
+  document.getElementById('p-count').textContent=total+' registros';
+
+  // KPIs Estornos
+  const estTotal=estFiltrado.length;
+  const estPend=estFiltrado.filter(d=>(d.status||'').trim()==='Pendente').length;
+  const estConc=estFiltrado.filter(d=>(d.status||'').trim()==='Pago').length;
+  const estRec=estFiltrado.filter(d=>(d.status||'').trim()==='Recusado').length;
+  const estValor=estFiltrado.reduce((s,d)=>{const v=parseBRL(d.valor);return s+(isNaN(v)?0:v);},0);
+  document.getElementById('p-est-total').textContent=estTotal;
+  document.getElementById('p-est-pend').textContent=estPend;
+  document.getElementById('p-est-conc').textContent=estConc;
+  document.getElementById('p-est-rec').textContent=estRec;
+  document.getElementById('p-est-valor').textContent='R$ '+estValor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('p-est-count').textContent=estTotal+' registros';
+
+  // Gráficos mês a mês e motivos (sempre sem filtro de data, mostra histórico completo se "Tudo")
+  renderMensalChart(estFiltrado);
+  renderMotivos(estFiltrado);
+
+  // Barras SAC
+  const porAtendente=contarPor(sacFiltrado,'atendente');
+  const porCanal=contarPor(sacFiltrado,'canal');
+  const porTipo=contarPor(sacFiltrado,'tipo');
+  const porStatus=contarPor(sacFiltrado,'status');
+  renderBars('p-atendente',porAtendente,Math.max(...Object.values(porAtendente),1));
+  renderBars('p-canal',porCanal,Math.max(...Object.values(porCanal),1));
+  renderBars('p-tipo',porTipo,Math.max(...Object.values(porTipo),1));
+  renderBars('p-status',porStatus,Math.max(...Object.values(porStatus),1));
+
+  // Tabela SAC
+  const tbody=document.getElementById('p-tbody');
+  const sacRecente=sacFiltrado.slice().reverse().slice(0,20);
+  tbody.innerHTML=sacRecente.length===0?'<tr><td colspan="6" class="p-sem-dados">Sem registros no período</td></tr>':sacRecente.map(d=>`<tr>
+    <td style="color:#555;white-space:nowrap">${d.dataHora}</td>
+    <td style="font-weight:500;color:#fff">${d.pedido}</td>
+    <td style="color:#888">${d.canal}</td>
+    <td style="color:#666">${d.tipo}</td>
+    <td>${d.atendente}</td>
+    <td><span class="p-badge ${statusBadge[d.status]||'pb-aberto'}">${d.status||'—'}</span></td>
+  </tr>`).join('');
+
+  // Tabela Estornos
+  const estTbody=document.getElementById('p-est-tbody');
+  const estRecente=estFiltrado.slice().reverse().slice(0,30);
+  estTbody.innerHTML=estRecente.length===0?'<tr><td colspan="7" class="p-sem-dados">Sem estornos no período</td></tr>':estRecente.map(d=>`<tr>
+    <td style="color:#555;white-space:nowrap">${d.data||d.dataHora||'—'}</td>
+    <td style="font-weight:500;color:#fff">${d.num_cliente||'—'}</td>
+    <td style="color:#888">${d.nome_cliente||'—'}</td>
+    <td style="color:#666">${d.motivo||d.tipo||'—'}</td>
+    <td style="color:#a855f7;font-weight:500">R$ ${(()=>{const v=parseBRL(d.valor);return isNaN(v)?'—':v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});})()}</td>
+    <td>${d.solicitante||'—'}</td>
+    <td><span class="p-badge ${statusBadge[(d.status||'').trim()]||'pb-aberto'}">${d.status||'—'}</span></td>
+  </tr>`).join('');
+}
+
+// ─────────────── CARREGAR DADOS ───────────────
 async function carregarPainel(){
+  // Só carrega se o painel está visível
+  const wrap=document.getElementById('p-conteudo-wrap');
+  if(!wrap||wrap.style.display==='none') return;
+
   document.getElementById('p-loading').style.display='block';
   document.getElementById('p-conteudo').style.display='none';
   try{
+    // Carregar SAC
     const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q1000&headers=0`;
     const res=await fetch(url);
     const txt=await res.text();
     const json=JSON.parse(txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
     const rows=json.table.rows;
-    const dados=rows.map(r=>{
+    dadosSACGlobal=rows.map(r=>{
       const c=v=>{const val=r.c[v];if(!val)return '';if(val.f)return val.f;if(typeof val.v==='string'&&val.v.startsWith('Date(')){const p=val.v.replace('Date(','').replace(')','').split(',');const d=new Date(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]),parseInt(p[3]||0),parseInt(p[4]||0));return d.toLocaleDateString('pt-BR')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}return val.v!==null?String(val.v):'';};
       return{dataHora:c(0),pedido:c(1),canal:c(2),tipo:c(3),atendente:c(4),cliente:c(5),sla:c(6),status:c(9),dentroDeSLA:c(16)};
     }).filter(d=>d.pedido);
 
-    const total=dados.length;
-    const aberto=dados.filter(d=>d.status==='Em aberto'||d.status==='Em andamento'||d.status==='Ag. retorno').length;
-    const resolvido=dados.filter(d=>d.status==='Resolvido').length;
-    const slaOk=dados.filter(d=>d.dentroDeSLA==='Sim').length;
-    const slaTot=dados.filter(d=>d.dentroDeSLA==='Sim'||d.dentroDeSLA==='Não').length;
-    const pct=slaTot>0?Math.round((slaOk/slaTot)*100)+'%':'—';
-
-    document.getElementById('p-total').textContent=total;
-    document.getElementById('p-aberto').textContent=aberto;
-    document.getElementById('p-resolvido').textContent=resolvido;
-    document.getElementById('p-sla').textContent=pct;
-    document.getElementById('p-count').textContent=total+' registros';
-
-    const porAtendente=contarPor(dados,'atendente');
-    const porCanal=contarPor(dados,'canal');
-    const porTipo=contarPor(dados,'tipo');
-    const porStatus=contarPor(dados,'status');
-    renderBars('p-atendente',porAtendente,Math.max(...Object.values(porAtendente),1));
-    renderBars('p-canal',porCanal,Math.max(...Object.values(porCanal),1));
-    renderBars('p-tipo',porTipo,Math.max(...Object.values(porTipo),1));
-    renderBars('p-status',porStatus,Math.max(...Object.values(porStatus),1));
-
-    const tbody=document.getElementById('p-tbody');
-    tbody.innerHTML=dados.slice().reverse().slice(0,20).map(d=>`<tr>
-      <td style="color:#555;white-space:nowrap">${d.dataHora}</td>
-      <td style="font-weight:500;color:#fff">${d.pedido}</td>
-      <td style="color:#888">${d.canal}</td>
-      <td style="color:#666">${d.tipo}</td>
-      <td>${d.atendente}</td>
-      <td><span class="p-badge ${statusBadge[d.status]||'pb-aberto'}">${d.status||'—'}</span></td>
-    </tr>`).join('');
-
+    // Carregar Estornos
     try{
       const resEst=await fetch(SCRIPT_URL+'?acao=listarEstornos');
       const jsonEst=await resEst.json();
-      const estornos=jsonEst.dados||[];
-      const estTotal=estornos.length;
-
-      const estPend=estornos.filter(d=>d.status.trim()==='Pendente').length;
-      const estConc=estornos.filter(d=>d.status.trim()==='Pago').length;
-      const estRec=estornos.filter(d=>d.status.trim()==='Recusado').length;
-
-      // ✅ BUG CORRIGIDO: usa parseBRL que trata ponto de milhar corretamente
-      const estValor=estornos.reduce((s,d)=>{
-        const v=parseBRL(d.valor);
-        return s+(isNaN(v)?0:v);
-      },0);
-
-      document.getElementById('p-est-total').textContent=estTotal;
-      document.getElementById('p-est-pend').textContent=estPend;
-      document.getElementById('p-est-conc').textContent=estConc;
-      document.getElementById('p-est-rec').textContent=estRec;
-      document.getElementById('p-est-valor').textContent='R$ '+estValor.toFixed(2).replace('.',',');
-    }catch(e){}
+      dadosEstornosGlobal=jsonEst.dados||[];
+    }catch(e){dadosEstornosGlobal=[];}
 
     document.getElementById('p-loading').style.display='none';
     document.getElementById('p-conteudo').style.display='block';
+    renderPainel();
   }catch(err){
     document.getElementById('p-loading').textContent='Erro ao carregar. Clique em ↻ Atualizar.';
   }
