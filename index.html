@@ -429,23 +429,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
     <div id="p-loading" class="p-loading">Carregando indicadores...</div>
     <div id="p-conteudo" style="display:none">
 
-      <!-- CARDS SAC -->
-      <div class="cards-grid">
-        <div class="p-card purple"><div class="lbl">Total SAC</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
-        <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
-        <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
-        <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
-      </div>
-
-      <!-- CARDS ESTORNOS -->
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px">
-        <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
-        <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
-        <div class="p-card green"><div class="lbl">Pagos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
-        <div class="p-card red"><div class="lbl">Recusados</div><div class="val" id="p-est-rec">0</div><div class="sub">estornos</div></div>
-        <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
-      </div>
-
       <!-- SUB-ABAS SAC / ESTORNOS -->
       <div style="display:flex;gap:0;border-bottom:1px solid #222;margin-bottom:20px">
         <button class="sub-tab-btn active" onclick="trocarSubTab('estornos',this)">📊 Estornos</button>
@@ -464,7 +447,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
           <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
         </div>
 
-        <!-- MOTIVOS POR MÊS (acima do gráfico) -->
+        <!-- MOTIVOS POR MÊS -->
         <div class="p-chart" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
             <h4>Principais motivos por mês</h4>
@@ -473,7 +456,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
           <div id="p-motivos-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px"></div>
         </div>
 
-        <!-- GRÁFICO MENSAL VISUAL -->
+        <!-- GRÁFICO MENSAL -->
         <div class="p-chart" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
             <h4>Estornos por mês — quantidade e valor</h4>
@@ -502,7 +485,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
           </div>
         </div>
 
-        <!-- TABELA ESTORNOS DETALHADA -->
+        <!-- TABELA ESTORNOS -->
         <div class="tbl-recentes">
           <div class="tbl-recentes-header">
             <h4>Estornos no período</h4>
@@ -558,11 +541,6 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
         </div>
 
       </div><!-- /subtab-sac -->
-
-      <!-- TABELA ESTORNOS ANTIGA (removida — substituída acima) -->
-      <div style="display:none">
-        <tbody id="p-est-tbody"></tbody>
-      </div>
 
     </div><!-- /p-conteudo -->
   </div><!-- /p-conteudo-wrap -->
