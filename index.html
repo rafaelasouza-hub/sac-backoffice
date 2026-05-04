@@ -475,11 +475,7 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
         <div class="p-chart" style="margin-bottom:16px">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
             <h4>Estornos por mês — quantidade e valor</h4>
-            <div style="display:flex;gap:6px">
-              <button class="filtro-mensal-btn" onclick="setMensalPeriodo(3,this)">3 meses</button>
-              <button class="filtro-mensal-btn ativo" onclick="setMensalPeriodo(6,this)">6 meses</button>
-              <button class="filtro-mensal-btn" onclick="setMensalPeriodo(12,this)">12 meses</button>
-            </div>
+            <span style="font-size:11px;color:#444" id="mc-periodo-label">conforme filtro de período</span>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:#666">
             <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#7c3aed;display:inline-block"></span>Qtd. estornos</span>
@@ -797,6 +793,8 @@ function aplicarFiltroCostom(){
   document.querySelectorAll('.filtro-atalho').forEach(b=>b.classList.remove('ativo'));
   const label=de||ate?(de?fmtDate(new Date(de+'T12:00:00')):'início')+' → '+(ate?fmtDate(new Date(ate+'T12:00:00')):'hoje'):'Todos os registros';
   document.getElementById('filtro-label').textContent=label;
+  const mcLabel=document.getElementById('mc-periodo-label');
+  if(mcLabel) mcLabel.textContent=label;
   renderPainel();
 }
 
@@ -825,16 +823,13 @@ function setMensalPeriodo(n,btn){
   mesesVisiveis=n;
   document.querySelectorAll('.filtro-mensal-btn').forEach(b=>b.classList.remove('ativo'));
   btn.classList.add('ativo');
-  renderMensalChart(dadosEstornosGlobal);
+  renderPainel();
 }
 
 function renderMensalChart(estornos){
-  const hoje=new Date();
-  const corte=new Date(hoje.getFullYear(),hoje.getMonth()-mesesVisiveis+1,1);
-  const filtrado=estornos.filter(e=>{const d=toISO(e.data||e.dataHora);return d&&d>=corte;});
-
+  // estornos já vem filtrado pelo filtro do painel
   const porMes={};
-  filtrado.forEach(e=>{
+  estornos.forEach(e=>{
     const d=toISO(e.data||e.dataHora);
     if(!d) return;
     const k=mesKey(d);
@@ -842,9 +837,12 @@ function renderMensalChart(estornos){
     porMes[k].qty++;
     const v=parseBRL(e.valor);
     if(!isNaN(v)) porMes[k].valor+=v;
-    const mot=e.motivo||e.tipo||'—';
+    // lê todos os campos possíveis onde o motivo pode estar
+    const mot=e.motivo||e.tipo||e.tipo_pag||e.Motivo||e.Tipo||'—';
     porMes[k].motivos[mot]=(porMes[k].motivos[mot]||0)+1;
   });
+  // debug: mostra campos do primeiro estorno no console
+  if(estornos.length>0) console.log('[SAC debug] campos do estorno:', Object.keys(estornos[0]), estornos[0]);
 
   const keys=Object.keys(porMes).sort();
   const labels=keys.map(mesLabel);
@@ -950,8 +948,8 @@ function renderPainel(){
   document.getElementById('p-est-valor').textContent='R$ '+estValor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('p-est-count').textContent=estTotal+' registros';
 
-  // Gráfico mensal e motivos
-  renderMensalChart(dadosEstornosGlobal);
+  // Gráfico mensal e motivos — usa estFiltrado (já respeitou filtro do painel)
+  renderMensalChart(estFiltrado);
 
   // Barras SAC
   const porAtendente=contarPor(sacFiltrado,'atendente');
