@@ -143,6 +143,9 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .motivo-count{font-size:12px;color:#666;min-width:20px;text-align:right}
 .motivo-pct-inline{font-size:10px;color:#333;min-width:32px;text-align:right}
 
+.filtro-mensal-btn{padding:4px 12px;font-size:11px;border:1px solid #2a2a2a;border-radius:20px;background:transparent;color:#555;cursor:pointer;transition:all .15s}
+.filtro-mensal-btn:hover{color:#fff;border-color:#444}
+.filtro-mensal-btn.ativo{background:#7c3aed;border-color:#7c3aed;color:#fff}
 .tbl-recentes{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden;margin-bottom:24px}
 .tbl-recentes-header{padding:14px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
 .tbl-recentes-header h4{font-size:13px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.5px}
@@ -438,26 +441,46 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
         <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
       </div>
 
-      <!-- GRÁFICOS MÊS A MÊS -->
-      <div class="mensal-grid">
-        <div class="p-chart">
-          <div class="motivos-header">
-            <h4>Estornos por mês</h4>
+      <!-- GRÁFICO MENSAL VISUAL -->
+      <div class="p-chart" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+          <h4>Estornos por mês — quantidade e valor</h4>
+          <div style="display:flex;gap:6px">
+            <button class="filtro-mensal-btn" onclick="setMensalPeriodo(3,this)">3 meses</button>
+            <button class="filtro-mensal-btn ativo" onclick="setMensalPeriodo(6,this)">6 meses</button>
+            <button class="filtro-mensal-btn" onclick="setMensalPeriodo(12,this)">12 meses</button>
           </div>
-          <div class="legenda-bar">
-            <div class="legenda-item"><div class="legenda-dot purple"></div> Qtd. estornos</div>
-            <div class="legenda-item"><div class="legenda-dot cyan"></div> Valor (R$)</div>
-          </div>
-          <div id="p-mensal-chart" class="mensal-chart-wrap"></div>
         </div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:#666">
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#7c3aed;display:inline-block"></span>Qtd. estornos</span>
+          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#22d3ee;display:inline-block"></span>Valor total (R$)</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Estornos no período</div>
+            <div style="font-size:22px;font-weight:600;color:#a855f7" id="mc-total">—</div>
+          </div>
+          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Valor total</div>
+            <div style="font-size:18px;font-weight:600;color:#22d3ee" id="mc-valor">—</div>
+          </div>
+          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Ticket médio</div>
+            <div style="font-size:18px;font-weight:600;color:#fbbf24" id="mc-ticket">—</div>
+          </div>
+        </div>
+        <div style="position:relative;width:100%;height:260px">
+          <canvas id="chartMensal" role="img" aria-label="Gráfico de estornos por mês">Carregando...</canvas>
+        </div>
+      </div>
 
-        <div class="p-chart motivo-colors">
-          <div class="motivos-header">
-            <h4>Principais motivos de estorno</h4>
-            <span class="motivo-pct" id="p-motivos-total"></span>
-          </div>
-          <div id="p-motivos-chart"></div>
+      <!-- MOTIVOS POR MÊS -->
+      <div class="p-chart" style="margin-bottom:16px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <h4>Principais motivos por mês</h4>
+          <span style="font-size:12px;color:#444" id="p-motivos-total"></span>
         </div>
+        <div id="p-motivos-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px"></div>
       </div>
 
       <!-- GRÁFICOS SAC -->
@@ -673,13 +696,23 @@ function limparFormEstorno(){['e-solicitante','e-motivo','e-num-cliente','e-nome
 
 // ─────────────── FILTROS ───────────────
 function toISO(dd_mm_yyyy_hhmm){
-  // "25/03/2026 16:26" ou "25/03/2026 16:26:45"
+  // Aceita "25/03/2026 16:26", "25/03/2026 16:26:45", "2026-03-25", etc.
   if(!dd_mm_yyyy_hhmm) return null;
-  const partes=String(dd_mm_yyyy_hhmm).trim().split(' ');
-  const dateParts=partes[0].split('/');
-  if(dateParts.length<3) return null;
-  const [d,m,y]=dateParts;
-  return new Date(`${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}T00:00:00`);
+  const s=String(dd_mm_yyyy_hhmm).trim();
+  if(!s) return null;
+  // Formato DD/MM/YYYY ...
+  const m1=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m1){
+    const [,d,m,y]=m1;
+    return new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+  }
+  // Formato YYYY-MM-DD ...
+  const m2=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if(m2){
+    const [,y,m,d]=m2;
+    return new Date(parseInt(y),parseInt(m)-1,parseInt(d));
+  }
+  return null;
 }
 
 function dentroDoFiltro(dataStr){
@@ -747,65 +780,108 @@ function renderBars(containerId,dados,max){
 }
 const statusBadge={'Em aberto':'pb-aberto','Em andamento':'pb-andamento','Ag. retorno':'pb-ag','Resolvido':'pb-resolvido','Cancelado':'pb-cancelado','Pendente':'pb-pendente','Pago':'pb-pago','Recusado':'pb-recusado'};
 
-function renderMensalChart(estornos){
-  const el=document.getElementById('p-mensal-chart');
-  if(!el) return;
-  const porMes={};
-  estornos.forEach(e=>{
-    const data=toISO(e.data||e.dataHora);
-    if(!data) return;
-    const key=data.getFullYear()+'-'+String(data.getMonth()+1).padStart(2,'0');
-    if(!porMes[key]){porMes[key]={label:'',qty:0,valor:0};}
-    porMes[key].qty++;
-    const v=parseBRL(e.valor);
-    if(!isNaN(v)) porMes[key].valor+=v;
-    if(!porMes[key].label){
-      const d=new Date(data.getFullYear(),data.getMonth(),1);
-      porMes[key].label=d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}).replace('.','');
-    }
-  });
-  const entries=Object.entries(porMes).sort((a,b)=>a[0].localeCompare(b[0]));
-  if(entries.length===0){el.innerHTML='<div class="p-sem-dados">Sem estornos no período</div>';return;}
-  const maxQty=Math.max(...entries.map(([,v])=>v.qty),1);
-  const maxVal=Math.max(...entries.map(([,v])=>v.valor),1);
-  el.innerHTML=entries.map(([,v])=>`
-    <div class="mes-row">
-      <span class="mes-label">${v.label}</span>
-      <div class="mes-bars">
-        <div class="mes-bar-qty" style="width:${Math.round((v.qty/maxQty)*100)}%"></div>
-        <div class="mes-bar-val" style="width:${Math.round((v.valor/maxVal)*100)}%"></div>
-      </div>
-      <div class="mes-nums">
-        <span class="mes-num-qty">${v.qty} est.</span>
-        <span class="mes-num-val">R$ ${v.valor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}</span>
-      </div>
-    </div>`).join('');
+let chartMensalInstance=null;
+let mesesVisiveis=6;
+
+function mesKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+function mesLabel(key){const[y,m]=key.split('-');const d=new Date(parseInt(y),parseInt(m)-1,1);return d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}).replace('.','');}
+
+function setMensalPeriodo(n,btn){
+  mesesVisiveis=n;
+  document.querySelectorAll('.filtro-mensal-btn').forEach(b=>b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  renderMensalChart(dadosEstornosGlobal);
 }
 
-function renderMotivos(estornos){
-  const el=document.getElementById('p-motivos-chart');
-  const totalEl=document.getElementById('p-motivos-total');
-  if(!el) return;
-  // coluna motivo/tipo
-  const porMotivo={};
-  estornos.forEach(e=>{
-    const m=e.motivo||e.tipo||e.tipo_pag||'—';
-    porMotivo[m]=(porMotivo[m]||0)+1;
+function renderMensalChart(estornos){
+  const hoje=new Date();
+  const corte=new Date(hoje.getFullYear(),hoje.getMonth()-mesesVisiveis+1,1);
+  const filtrado=estornos.filter(e=>{const d=toISO(e.data||e.dataHora);return d&&d>=corte;});
+
+  const porMes={};
+  filtrado.forEach(e=>{
+    const d=toISO(e.data||e.dataHora);
+    if(!d) return;
+    const k=mesKey(d);
+    if(!porMes[k]){porMes[k]={qty:0,valor:0,motivos:{}};}
+    porMes[k].qty++;
+    const v=parseBRL(e.valor);
+    if(!isNaN(v)) porMes[k].valor+=v;
+    const mot=e.motivo||e.tipo||'—';
+    porMes[k].motivos[mot]=(porMes[k].motivos[mot]||0)+1;
   });
-  const entries=Object.entries(porMotivo).sort((a,b)=>b[1]-a[1]);
-  if(entries.length===0){el.innerHTML='<div class="p-sem-dados">Sem estornos no período</div>';if(totalEl)totalEl.textContent='';return;}
-  const total=entries.reduce((s,[,v])=>s+v,0);
-  if(totalEl) totalEl.textContent=total+' registros';
-  const cores=['var(--c0)','var(--c1)','var(--c2)','var(--c3)','var(--c4)'];
-  const max=entries[0][1];
-  el.innerHTML=entries.map(([k,v],i)=>`
-    <div class="motivo-row">
-      <span class="motivo-rank">${i+1}</span>
-      <span class="motivo-label" title="${k}">${k}</span>
-      <div class="motivo-bar-wrap"><div class="motivo-bar-fill" style="width:${Math.round((v/max)*100)}%;background:${cores[i%cores.length]}"></div></div>
-      <span class="motivo-count">${v}</span>
-      <span class="motivo-pct-inline">${Math.round((v/total)*100)}%</span>
-    </div>`).join('');
+
+  const keys=Object.keys(porMes).sort();
+  const labels=keys.map(mesLabel);
+  const qtds=keys.map(k=>porMes[k].qty);
+  const valores=keys.map(k=>Math.round(porMes[k].valor*100)/100);
+
+  const totalQty=qtds.reduce((a,b)=>a+b,0);
+  const totalVal=valores.reduce((a,b)=>a+b,0);
+  const ticket=totalQty>0?totalVal/totalQty:0;
+
+  document.getElementById('mc-total').textContent=totalQty;
+  document.getElementById('mc-valor').textContent='R$ '+totalVal.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('mc-ticket').textContent='R$ '+ticket.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+  if(chartMensalInstance) chartMensalInstance.destroy();
+  chartMensalInstance=new Chart(document.getElementById('chartMensal'),{
+    data:{
+      labels,
+      datasets:[
+        {type:'bar',label:'Qtd. estornos',data:qtds,backgroundColor:'rgba(124,58,237,0.75)',borderColor:'#7c3aed',borderWidth:1,borderRadius:5,yAxisID:'y',order:2},
+        {type:'line',label:'Valor total (R$)',data:valores,borderColor:'#22d3ee',backgroundColor:'rgba(34,211,238,0.06)',borderWidth:2,pointBackgroundColor:'#22d3ee',pointRadius:4,pointHoverRadius:6,tension:0.4,fill:true,yAxisID:'y2',order:1}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'#1a1a1a',borderColor:'#333',borderWidth:1,
+          titleColor:'#ccc',bodyColor:'#aaa',padding:10,
+          callbacks:{label:ctx=>{
+            if(ctx.datasetIndex===0) return ' Estornos: '+ctx.raw;
+            return ' Valor: R$ '+ctx.raw.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+          }}
+        }
+      },
+      scales:{
+        x:{ticks:{color:'#555',font:{size:12},autoSkip:false,maxRotation:0},grid:{color:'rgba(255,255,255,0.05)'},border:{display:false}},
+        y:{position:'left',ticks:{color:'#666',font:{size:11},stepSize:1,precision:0},grid:{color:'rgba(255,255,255,0.05)'},border:{display:false},title:{display:true,text:'Qtd.',color:'#555',font:{size:11}}},
+        y2:{position:'right',ticks:{color:'#22d3ee',font:{size:11},callback:v=>'R$ '+Math.round(v).toLocaleString('pt-BR')},grid:{drawOnChartArea:false},border:{display:false},title:{display:true,text:'Valor (R$)',color:'#22d3ee',font:{size:11}}}
+      }
+    }
+  });
+
+  renderMotivosPorMes(porMes,keys);
+}
+
+const coresMotivoHex=['#7c3aed','#0e9488','#d97706','#dc2626','#059669'];
+
+function renderMotivosPorMes(porMes,keys){
+  const grid=document.getElementById('p-motivos-grid');
+  const totalEl=document.getElementById('p-motivos-total');
+  if(!grid) return;
+  if(keys.length===0){grid.innerHTML='<div style="color:#444;font-size:13px;padding:1rem 0">Sem dados no período</div>';if(totalEl)totalEl.textContent='';return;}
+  const totalGeral=keys.reduce((s,k)=>s+porMes[k].qty,0);
+  if(totalEl) totalEl.textContent=totalGeral+' registros';
+  grid.innerHTML=keys.map(k=>{
+    const m=porMes[k];
+    const entries=Object.entries(m.motivos).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    const total=Object.values(m.motivos).reduce((a,b)=>a+b,0);
+    return`<div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+      <div style="font-size:12px;font-weight:500;color:#888;margin-bottom:10px">${mesLabel(k)} <span style="font-weight:400;color:#444">(${m.qty} · R$ ${Math.round(m.valor).toLocaleString('pt-BR')})</span></div>
+      ${entries.map(([nome,qty],i)=>`
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">
+          <span style="font-size:10px;font-weight:600;color:#444;min-width:14px">${i+1}</span>
+          <span style="font-size:11px;color:#888;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${nome}">${nome}</span>
+          <div style="width:50px;background:#1a1a1a;border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((qty/total)*100)}%;height:6px;border-radius:3px;background:${coresMotivoHex[i%5]}"></div></div>
+          <span style="font-size:10px;color:#444;min-width:28px;text-align:right">${Math.round((qty/total)*100)}%</span>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
 }
 
 function renderPainel(){
@@ -838,9 +914,8 @@ function renderPainel(){
   document.getElementById('p-est-valor').textContent='R$ '+estValor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('p-est-count').textContent=estTotal+' registros';
 
-  // Gráficos mês a mês e motivos (sempre sem filtro de data, mostra histórico completo se "Tudo")
-  renderMensalChart(estFiltrado);
-  renderMotivos(estFiltrado);
+  // Gráfico mensal e motivos
+  renderMensalChart(dadosEstornosGlobal);
 
   // Barras SAC
   const porAtendente=contarPor(sacFiltrado,'atendente');
@@ -913,5 +988,6 @@ async function carregarPainel(){
   }
 }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 </body>
 </html>
