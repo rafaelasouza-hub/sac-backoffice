@@ -146,6 +146,9 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
 .filtro-mensal-btn{padding:4px 12px;font-size:11px;border:1px solid #2a2a2a;border-radius:20px;background:transparent;color:#555;cursor:pointer;transition:all .15s}
 .filtro-mensal-btn:hover{color:#fff;border-color:#444}
 .filtro-mensal-btn.ativo{background:#7c3aed;border-color:#7c3aed;color:#fff}
+.sub-tab-btn{padding:10px 18px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#555;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.sub-tab-btn.active{color:#a855f7;border-bottom:2px solid #a855f7;font-weight:500}
+.sub-tab-btn:hover{color:#888}
 .tbl-recentes{background:#111;border:1px solid #222;border-radius:12px;overflow:hidden;margin-bottom:24px}
 .tbl-recentes-header{padding:14px 20px;border-bottom:1px solid #222;display:flex;align-items:center;justify-content:space-between}
 .tbl-recentes-header h4{font-size:13px;font-weight:500;color:#888;text-transform:uppercase;letter-spacing:0.5px}
@@ -441,100 +444,126 @@ body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#fff;min-height:1
         <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
       </div>
 
-      <!-- GRÁFICO MENSAL VISUAL -->
-      <div class="p-chart" style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
-          <h4>Estornos por mês — quantidade e valor</h4>
-          <div style="display:flex;gap:6px">
-            <button class="filtro-mensal-btn" onclick="setMensalPeriodo(3,this)">3 meses</button>
-            <button class="filtro-mensal-btn ativo" onclick="setMensalPeriodo(6,this)">6 meses</button>
-            <button class="filtro-mensal-btn" onclick="setMensalPeriodo(12,this)">12 meses</button>
-          </div>
-        </div>
-        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:#666">
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#7c3aed;display:inline-block"></span>Qtd. estornos</span>
-          <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#22d3ee;display:inline-block"></span>Valor total (R$)</span>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
-          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
-            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Estornos no período</div>
-            <div style="font-size:22px;font-weight:600;color:#a855f7" id="mc-total">—</div>
-          </div>
-          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
-            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Valor total</div>
-            <div style="font-size:18px;font-weight:600;color:#22d3ee" id="mc-valor">—</div>
-          </div>
-          <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
-            <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Ticket médio</div>
-            <div style="font-size:18px;font-weight:600;color:#fbbf24" id="mc-ticket">—</div>
-          </div>
-        </div>
-        <div style="position:relative;width:100%;height:260px">
-          <canvas id="chartMensal" role="img" aria-label="Gráfico de estornos por mês">Carregando...</canvas>
-        </div>
+      <!-- SUB-ABAS SAC / ESTORNOS -->
+      <div style="display:flex;gap:0;border-bottom:1px solid #222;margin-bottom:20px">
+        <button class="sub-tab-btn active" onclick="trocarSubTab('estornos',this)">📊 Estornos</button>
+        <button class="sub-tab-btn" onclick="trocarSubTab('sac',this)">🎧 SAC</button>
       </div>
 
-      <!-- MOTIVOS POR MÊS -->
-      <div class="p-chart" style="margin-bottom:16px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-          <h4>Principais motivos por mês</h4>
-          <span style="font-size:12px;color:#444" id="p-motivos-total"></span>
-        </div>
-        <div id="p-motivos-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px"></div>
-      </div>
+      <!-- SUB-ABA ESTORNOS -->
+      <div id="subtab-estornos" class="sub-tab-page">
 
-      <!-- GRÁFICOS SAC -->
-      <div class="charts-grid">
-        <div class="p-chart">
-          <h4>Por atendente</h4>
-          <div id="p-atendente"></div>
+        <!-- CARDS ESTORNOS -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:20px">
+          <div class="p-card purple"><div class="lbl">Total Estornos</div><div class="val" id="p-est-total">0</div><div class="sub">registros</div></div>
+          <div class="p-card amber"><div class="lbl">Pendentes</div><div class="val" id="p-est-pend">0</div><div class="sub">estornos</div></div>
+          <div class="p-card green"><div class="lbl">Pagos</div><div class="val" id="p-est-conc">0</div><div class="sub">estornos</div></div>
+          <div class="p-card red"><div class="lbl">Recusados</div><div class="val" id="p-est-rec">0</div><div class="sub">estornos</div></div>
+          <div class="p-card purple"><div class="lbl">Valor total</div><div class="val" id="p-est-valor" style="font-size:18px">R$ 0</div><div class="sub">em estornos</div></div>
         </div>
-        <div class="p-chart">
-          <h4>Por canal</h4>
-          <div id="p-canal"></div>
-        </div>
-        <div class="p-chart">
-          <h4>Por tipo</h4>
-          <div id="p-tipo"></div>
-        </div>
-        <div class="p-chart">
-          <h4>Por status</h4>
-          <div id="p-status"></div>
-        </div>
-      </div>
 
-      <!-- TABELA ÚLTIMAS SOLICITAÇÕES SAC -->
-      <div class="tbl-recentes">
-        <div class="tbl-recentes-header">
-          <h4>Últimas solicitações SAC</h4>
-          <span id="p-count" style="font-size:12px;color:#444"></span>
+        <!-- MOTIVOS POR MÊS (acima do gráfico) -->
+        <div class="p-chart" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+            <h4>Principais motivos por mês</h4>
+            <span style="font-size:12px;color:#444" id="p-motivos-total"></span>
+          </div>
+          <div id="p-motivos-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px"></div>
         </div>
-        <div style="overflow-x:auto">
-          <table class="p-tbl">
-            <thead><tr>
-              <th>Data/Hora</th><th>Pedido</th><th>Canal</th>
-              <th>Tipo</th><th>Atendente</th><th>Status</th>
-            </tr></thead>
-            <tbody id="p-tbody"></tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- TABELA ESTORNOS DETALHADA -->
-      <div class="tbl-recentes tbl-estornos-wrap">
-        <div class="tbl-recentes-header">
-          <h4>Estornos no período</h4>
-          <span id="p-est-count" style="font-size:12px;color:#444"></span>
+        <!-- GRÁFICO MENSAL VISUAL -->
+        <div class="p-chart" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+            <h4>Estornos por mês — quantidade e valor</h4>
+            <div style="display:flex;gap:6px">
+              <button class="filtro-mensal-btn" onclick="setMensalPeriodo(3,this)">3 meses</button>
+              <button class="filtro-mensal-btn ativo" onclick="setMensalPeriodo(6,this)">6 meses</button>
+              <button class="filtro-mensal-btn" onclick="setMensalPeriodo(12,this)">12 meses</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:12px;color:#666">
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#7c3aed;display:inline-block"></span>Qtd. estornos</span>
+            <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:2px;background:#22d3ee;display:inline-block"></span>Valor total (R$)</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+            <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+              <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Estornos no período</div>
+              <div style="font-size:22px;font-weight:600;color:#a855f7" id="mc-total">—</div>
+            </div>
+            <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+              <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Valor total</div>
+              <div style="font-size:18px;font-weight:600;color:#22d3ee" id="mc-valor">—</div>
+            </div>
+            <div style="background:#0d0d0d;border:1px solid #1a1a1a;border-radius:8px;padding:12px 14px">
+              <div style="font-size:11px;color:#555;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Ticket médio</div>
+              <div style="font-size:18px;font-weight:600;color:#fbbf24" id="mc-ticket">—</div>
+            </div>
+          </div>
+          <div style="position:relative;width:100%;height:260px">
+            <canvas id="chartMensal" role="img" aria-label="Gráfico de estornos por mês">Carregando...</canvas>
+          </div>
         </div>
-        <div style="overflow-x:auto">
-          <table class="p-tbl">
-            <thead><tr>
-              <th>Data</th><th>Pedido</th><th>Cliente</th>
-              <th>Motivo</th><th>Valor</th><th>Solicitante</th><th>Status</th>
-            </tr></thead>
-            <tbody id="p-est-tbody"></tbody>
-          </table>
+
+        <!-- TABELA ESTORNOS DETALHADA -->
+        <div class="tbl-recentes">
+          <div class="tbl-recentes-header">
+            <h4>Estornos no período</h4>
+            <span id="p-est-count" style="font-size:12px;color:#444"></span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="p-tbl">
+              <thead><tr>
+                <th>Data</th><th>Pedido</th><th>Cliente</th>
+                <th>Motivo</th><th>Valor</th><th>Solicitante</th><th>Status</th>
+              </tr></thead>
+              <tbody id="p-est-tbody"></tbody>
+            </table>
+          </div>
         </div>
+
+      </div><!-- /subtab-estornos -->
+
+      <!-- SUB-ABA SAC -->
+      <div id="subtab-sac" class="sub-tab-page" style="display:none">
+
+        <!-- CARDS SAC -->
+        <div class="cards-grid" style="margin-bottom:20px">
+          <div class="p-card purple"><div class="lbl">Total SAC</div><div class="val" id="p-total">0</div><div class="sub">solicitações</div></div>
+          <div class="p-card amber"><div class="lbl">Em aberto</div><div class="val" id="p-aberto">0</div><div class="sub">pendentes</div></div>
+          <div class="p-card green"><div class="lbl">Resolvidos</div><div class="val" id="p-resolvido">0</div><div class="sub">casos</div></div>
+          <div class="p-card green"><div class="lbl">Dentro do SLA</div><div class="val" id="p-sla">—</div><div class="sub">1ª ação</div></div>
+        </div>
+
+        <!-- GRÁFICOS SAC -->
+        <div class="charts-grid">
+          <div class="p-chart"><h4>Por atendente</h4><div id="p-atendente"></div></div>
+          <div class="p-chart"><h4>Por canal</h4><div id="p-canal"></div></div>
+          <div class="p-chart"><h4>Por tipo</h4><div id="p-tipo"></div></div>
+          <div class="p-chart"><h4>Por status</h4><div id="p-status"></div></div>
+        </div>
+
+        <!-- TABELA SAC -->
+        <div class="tbl-recentes">
+          <div class="tbl-recentes-header">
+            <h4>Últimas solicitações SAC</h4>
+            <span id="p-count" style="font-size:12px;color:#444"></span>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="p-tbl">
+              <thead><tr>
+                <th>Data/Hora</th><th>Pedido</th><th>Canal</th>
+                <th>Tipo</th><th>Atendente</th><th>Status</th>
+              </tr></thead>
+              <tbody id="p-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /subtab-sac -->
+
+      <!-- TABELA ESTORNOS ANTIGA (removida — substituída acima) -->
+      <div style="display:none">
+        <tbody id="p-est-tbody"></tbody>
       </div>
 
     </div><!-- /p-conteudo -->
@@ -553,7 +582,13 @@ let filtroAtivo={de:null,ate:null};
 let dadosSACGlobal=[];
 let dadosEstornosGlobal=[];
 
-// ─────────────── SENHA ───────────────
+// ─────────────── SUB-ABAS PAINEL ───────────────
+function trocarSubTab(aba,btn){
+  document.querySelectorAll('.sub-tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('subtab-estornos').style.display=aba==='estornos'?'block':'none';
+  document.getElementById('subtab-sac').style.display=aba==='sac'?'block':'none';
+}
 function verificarSenha(){
   const senha=document.getElementById('p-senha').value;
   if(senha==='RafaCellfy2021'){
@@ -877,8 +912,9 @@ function renderMotivosPorMes(porMes,keys){
         <div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">
           <span style="font-size:10px;font-weight:600;color:#444;min-width:14px">${i+1}</span>
           <span style="font-size:11px;color:#888;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${nome}">${nome}</span>
-          <div style="width:50px;background:#1a1a1a;border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((qty/total)*100)}%;height:6px;border-radius:3px;background:${coresMotivoHex[i%5]}"></div></div>
-          <span style="font-size:10px;color:#444;min-width:28px;text-align:right">${Math.round((qty/total)*100)}%</span>
+          <div style="width:40px;background:#1a1a1a;border-radius:3px;height:6px;overflow:hidden"><div style="width:${Math.round((qty/total)*100)}%;height:6px;border-radius:3px;background:${coresMotivoHex[i%5]}"></div></div>
+          <span style="font-size:11px;color:#a855f7;font-weight:500;min-width:18px;text-align:right">${qty}</span>
+          <span style="font-size:10px;color:#444;min-width:30px;text-align:right">${Math.round((qty/total)*100)}%</span>
         </div>`).join('')}
     </div>`;
   }).join('');
