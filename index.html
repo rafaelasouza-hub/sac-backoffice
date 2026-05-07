@@ -707,17 +707,14 @@ function limparFormEstorno(){['e-solicitante','e-motivo','e-num-cliente','e-nome
 
 // ─────────────── FILTROS ───────────────
 function toISO(dd_mm_yyyy_hhmm){
-  // Aceita "25/03/2026 16:26", "25/03/2026 16:26:45", "2026-03-25", etc.
   if(!dd_mm_yyyy_hhmm) return null;
   const s=String(dd_mm_yyyy_hhmm).trim();
   if(!s) return null;
-  // Formato DD/MM/YYYY ...
   const m1=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
   if(m1){
     const [,d,m,y]=m1;
     return new Date(parseInt(y),parseInt(m)-1,parseInt(d));
   }
-  // Formato YYYY-MM-DD ...
   const m2=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
   if(m2){
     const [,y,m,d]=m2;
@@ -794,20 +791,11 @@ function renderBars(containerId,dados,max){
 const statusBadge={'Em aberto':'pb-aberto','Em andamento':'pb-andamento','Ag. retorno':'pb-ag','Resolvido':'pb-resolvido','Cancelado':'pb-cancelado','Pendente':'pb-pendente','Pago':'pb-pago','Recusado':'pb-recusado'};
 
 let chartMensalInstance=null;
-let mesesVisiveis=6;
 
 function mesKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
 function mesLabel(key){const[y,m]=key.split('-');const d=new Date(parseInt(y),parseInt(m)-1,1);return d.toLocaleDateString('pt-BR',{month:'short',year:'2-digit'}).replace('.','');}
 
-function setMensalPeriodo(n,btn){
-  mesesVisiveis=n;
-  document.querySelectorAll('.filtro-mensal-btn').forEach(b=>b.classList.remove('ativo'));
-  btn.classList.add('ativo');
-  renderPainel();
-}
-
 function renderMensalChart(estornos){
-  // estornos já vem filtrado pelo filtro do painel
   const porMes={};
   estornos.forEach(e=>{
     const d=toISO(e.data||e.dataHora);
@@ -817,12 +805,9 @@ function renderMensalChart(estornos){
     porMes[k].qty++;
     const v=parseBRL(e.valor);
     if(!isNaN(v)) porMes[k].valor+=v;
-    // lê todos os campos possíveis onde o motivo pode estar
     const mot=e.motivo||e.tipo||e.tipo_pag||e.Motivo||e.Tipo||'—';
     porMes[k].motivos[mot]=(porMes[k].motivos[mot]||0)+1;
   });
-  // debug: mostra campos do primeiro estorno no console
-  if(estornos.length>0) console.log('[SAC debug] campos do estorno:', Object.keys(estornos[0]), estornos[0]);
 
   const keys=Object.keys(porMes).sort();
   const labels=keys.map(mesLabel);
@@ -928,7 +913,7 @@ function renderPainel(){
   document.getElementById('p-est-valor').textContent='R$ '+estValor.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
   document.getElementById('p-est-count').textContent=estTotal+' registros';
 
-  // Gráfico mensal e motivos — usa estFiltrado (já respeitou filtro do painel)
+  // Gráfico mensal e motivos
   renderMensalChart(estFiltrado);
 
   // Barras SAC
@@ -941,9 +926,9 @@ function renderPainel(){
   renderBars('p-tipo',porTipo,Math.max(...Object.values(porTipo),1));
   renderBars('p-status',porStatus,Math.max(...Object.values(porStatus),1));
 
-  // Tabela SAC
+  // Tabela SAC — mostra TODOS os registros do período, ordenados do mais recente
   const tbody=document.getElementById('p-tbody');
-  const sacRecente=sacFiltrado.slice().reverse().slice(0,20);
+  const sacRecente=sacFiltrado.slice().reverse();
   tbody.innerHTML=sacRecente.length===0?'<tr><td colspan="6" class="p-sem-dados">Sem registros no período</td></tr>':sacRecente.map(d=>`<tr>
     <td style="color:#555;white-space:nowrap">${d.dataHora}</td>
     <td style="font-weight:500;color:#fff">${d.pedido}</td>
@@ -955,7 +940,7 @@ function renderPainel(){
 
   // Tabela Estornos
   const estTbody=document.getElementById('p-est-tbody');
-  const estRecente=estFiltrado.slice().reverse().slice(0,30);
+  const estRecente=estFiltrado.slice().reverse();
   estTbody.innerHTML=estRecente.length===0?'<tr><td colspan="7" class="p-sem-dados">Sem estornos no período</td></tr>':estRecente.map(d=>`<tr>
     <td style="color:#555;white-space:nowrap">${d.data||d.dataHora||'—'}</td>
     <td style="font-weight:500;color:#fff">${d.num_cliente||'—'}</td>
@@ -969,23 +954,37 @@ function renderPainel(){
 
 // ─────────────── CARREGAR DADOS ───────────────
 async function carregarPainel(){
-  // Só carrega se o painel está visível
   const wrap=document.getElementById('p-conteudo-wrap');
   if(!wrap||wrap.style.display==='none') return;
 
   document.getElementById('p-loading').style.display='block';
   document.getElementById('p-conteudo').style.display='none';
   try{
-    // Carregar SAC
-    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q1000&headers=0`;
+    // ── FIX: aumenta range e trata rows nulos/vazios ──
+    const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}&range=A2:Q2000&headers=0`;
     const res=await fetch(url);
     const txt=await res.text();
     const json=JSON.parse(txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/)[1]);
     const rows=json.table.rows;
-    dadosSACGlobal=rows.map(r=>{
-      const c=v=>{const val=r.c[v];if(!val)return '';if(val.f)return val.f;if(typeof val.v==='string'&&val.v.startsWith('Date(')){const p=val.v.replace('Date(','').replace(')','').split(',');const d=new Date(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]),parseInt(p[3]||0),parseInt(p[4]||0));return d.toLocaleDateString('pt-BR')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}return val.v!==null?String(val.v):'';};
-      return{dataHora:c(0),pedido:c(1),canal:c(2),tipo:c(3),atendente:c(4),cliente:c(5),sla:c(6),status:c(9),dentroDeSLA:c(16)};
-    }).filter(d=>d.pedido);
+
+    dadosSACGlobal=rows
+      .filter(r => r && r.c && r.c.length > 0)  // ignora rows nulos (linhas em branco na sheet)
+      .map(r=>{
+        const c=v=>{
+          if(!r.c||!r.c[v]) return '';
+          const val=r.c[v];
+          if(!val||val.v===null||val.v===undefined) return '';
+          if(val.f) return val.f;
+          if(typeof val.v==='string'&&val.v.startsWith('Date(')){
+            const p=val.v.replace('Date(','').replace(')','').split(',');
+            const d=new Date(parseInt(p[0]),parseInt(p[1]),parseInt(p[2]),parseInt(p[3]||0),parseInt(p[4]||0));
+            return d.toLocaleDateString('pt-BR')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+          }
+          return String(val.v);
+        };
+        return{dataHora:c(0),pedido:c(1),canal:c(2),tipo:c(3),atendente:c(4),cliente:c(5),sla:c(6),status:c(9),dentroDeSLA:c(16)};
+      })
+      .filter(d=>d.pedido&&d.pedido.trim()!=='');  // descarta só se pedido realmente vazio
 
     // Carregar Estornos
     try{
